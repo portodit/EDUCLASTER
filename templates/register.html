@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUCLUSTER - Daftar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple600: #7e56d8;
+            --purple700: #6840c6;
+            --purple300: #d6bbfb;
+            --grey900: #111415;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .register-container {
+            display: flex;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 900px;
+            max-width: 95%;
+            overflow: hidden;
+            height: 600px;
+        }
+        
+        .register-image {
+            flex: 1;
+            background-color: var(--purple600);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+        
+        .register-image img {
+            max-width: 80%;
+            height: auto;
+            z-index: 2;
+        }
+        
+        .register-image .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(104, 64, 198, 0.9), rgba(126, 86, 216, 0.7));
+            z-index: 1;
+        }
+        
+        .register-image .title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            z-index: 2;
+        }
+        
+        .register-image .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            z-index: 2;
+            text-align: center;
+        }
+        
+        .register-form {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        
+        .register-header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .register-header img {
+            max-width: 180px;
+            margin-bottom: 1rem;
+        }
+        
+        .register-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .register-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--purple600);
+            box-shadow: 0 0 0 3px rgba(126, 86, 216, 0.2);
+            outline: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--purple600);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 0.5rem;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--purple700);
+            transform: translateY(-2px);
+        }
+        
+        .btn-google {
+            background-color: white;
+            color: #333;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 0.75rem;
+        }
+        
+        .btn-google:hover {
+            background-color: #f5f5f5;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .google-icon {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .form-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.875rem;
+        }
+        
+        .form-footer a {
+            color: var(--purple600);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.25rem 0;
+            color: #888;
+            font-size: 0.875rem;
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .divider::before {
+            margin-right: 0.5rem;
+        }
+        
+        .divider::after {
+            margin-left: 0.5rem;
+        }
+        
+        .error-message {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Pattern Background */
+        .pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .register-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .register-image {
+                display: none;
+            }
+            
+            .register-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- Left Side - Image -->
+        <div class="register-image">
+            <div class="pattern"></div>
+            <div class="overlay"></div>
+            <img src="{{ url_for('static', filename='img/register-illustration.svg') }}" alt="Illustration">
+            <h2 class="title">EDUCLUSTER</h2>
+            <p class="subtitle">Visualisasikan pendidikan berkualitas, ciptakan kesetaraan antar wilayah</p>
+        </div>
+        
+        <!-- Right Side - Register Form -->
+        <div class="register-form">
+            <div class="register-header">
+                <img src="{{ url_for('static', filename='img/educluster-fullcolor.png') }}" alt="EDUCLUSTER Logo">
+                <h1>Buat Akun Baru</h1>
+                <p>Silakan lengkapi informasi berikut untuk mendaftar</p>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="error-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    <label for="username">Nama Pengguna</label>
+                    {{ form.username(class="form-control", placeholder="Masukkan nama pengguna") }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    {{ form.email(class="form-control", placeholder="nama@contoh.com") }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Kata Sandi</label>
+                    {{ form.password(class="form-control", placeholder="Minimal 8 karakter") }}
+                </div>
+                
+                <button type="submit" class="btn-primary">Daftar Sekarang</button>
+                
+                <div class="divider">atau</div>
+                
+                <a href="#" class="btn-google">
+                    <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                    </svg>
+                    Daftar dengan Google
+                </a>
+            </form>
+            
+            <div class="form-footer">
+                Sudah punya akun? <a href="{{ url_for('login') }}">Masuk sekarang</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

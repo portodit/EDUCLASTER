@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard Klaster Pendidikan{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --purple600: #7e56d8;
+            --purple700: #6840c6;
+            --purple300: #d6bbfb;
+            --grey900: #111415;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .topbar {
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .topbar-expanded {
+            height: auto;
+        }
+        
+        .topbar-collapsed {
+            height: 80px;
+        }
+        
+        .nav-section {
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform-origin: top;
+            background-color: white;
+            width: 100%;
+        }
+        
+        .nav-hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .nav-visible {
+            opacity: 1;
+            transform: translateY(0);
+            padding-top: 0.5rem; /* Reduced padding-top */
+            padding-bottom: 0.5rem; /* Reduced padding-bottom */
+        }
+        
+        .toggle-icon {
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .icon-collapsed {
+            transform: rotate(180deg);
+        }
+        
+        .logo-container {
+            transition: all 0.3s ease;
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            transition: margin-top 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            margin-top: 80px;
+        }
+        
+        .content-expanded {
+            margin-top: 120px; /* Reduced margin-top */
+        }
+        
+        .content-collapsed {
+            margin-top: 80px;
+        }
+
+        /* Dropdown styling */
+        .dropdown-toggle::after {
+            content: "";
+            display: inline-block;
+            margin-left: 0.255em;
+            vertical-align: middle;
+            border-top: 0.3em solid;
+            border-right: 0.3em solid transparent;
+            border-bottom: 0;
+            border-left: 0.3em solid transparent;
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .dropdown:hover .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+        
+        .dropdown-menu {
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Tombol Masuk */
+        .btn-masuk {
+            background-color: var(--purple600);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem 2.5rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 15px rgba(126, 86, 216, 0.2);
+        }
+
+        .btn-masuk:hover {
+            background-color: var(--purple700);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(126, 86, 216, 0.3);
+        }
+
+        /* Container full */
+        .container-full {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Nav link styling */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.4rem 0.75rem; /* Reduced padding */
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0; /* Remove bottom margin */
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(126, 86, 216, 0.05);
+            color: var(--purple600);
+            transform: translateY(-1px);
+        }
+        
+        /* Nav link active */
+        .nav-link-active {
+            color: var(--purple600);
+            background-color: rgba(126, 86, 216, 0.08);
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(126, 86, 216, 0.1);
+            position: relative;
+        }
+        
+        .nav-link-active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 60%;
+            height: 2px;
+            background: var(--purple600);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link-active:hover::after {
+            width: 80%;
+        }
+
+        /* User avatar style */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e5e7eb;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .user-avatar:hover {
+            border-color: var(--purple600);
+            transform: scale(1.05);
+        }
+
+        /* User dropdown menu */
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 220px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .user-container:hover .user-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .user-dropdown-item {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+
+        .user-dropdown-item:hover {
+            background-color: #f3f4f6;
+            color: var(--purple600);
+        }
+
+        .user-dropdown-item svg {
+            margin-right: 12px;
+        }
+        
+        /* Compact spacing for nav items */
+        .nav-container {
+            gap: 0.5rem; /* Small gap between items */
+        }
+        
+        .nav-container a, .nav-container button {
+            margin: 0; /* Remove margins */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        
+        /* Responsive navigation */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                gap: 0.25rem;
+            }
+            
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .desktop-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .menu-open .desktop-menu {
+                display: flex;
+                animation: slideDown 0.3s ease-out;
+            }
+            
+            .nav-link {
+                width: 100%;
+                padding: 0.75rem 1rem;
+                margin: 0.25rem 0;
+            }
+
+            .dropdown-menu {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                margin: 0.25rem 0;
+                padding: 0 0 0 2rem;
+                background-color: rgba(126, 86, 216, 0.03);
+            }
+            
+            .dropdown:hover .dropdown-menu {
+                display: block;
+                border-radius: 0.25rem;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            
+            .user-dropdown {
+                width: 100%;
+                position: static;
+                box-shadow: none;
+                margin-top: 1rem;
+                border: 1px solid rgba(0,0,0,0.1);
+            }
+            
+            .content-expanded {
+                margin-top: auto;
+            }
+            
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Topbar -->
+    <div id="topbar" class="topbar topbar-collapsed fixed top-0 w-full text-gray-800 z-50">
+        <!-- Top Logo Section -->
+        <div class="border-b border-gray-200">
+            <div class="container mx-auto px-4 md:px-8 flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <div class="mr-4 logo-container">
+                        <a href="/" title="Kembali ke Beranda" class="block">
+                            <img src="{{ url_for('static', filename='img/educluster-fullcolor.png') }}" alt="EDUCLUSTER" class="h-10 transition-transform hover:scale-105">
+                        </a>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuButton" class="md:hidden text-gray-600 focus:outline-none ml-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="flex items-center space-x-4 md:space-x-6">
+                    {% if current_user.is_authenticated %}
+                    <!-- User menu when logged in -->
+                    <div class="user-container relative">
+                        <div class="flex items-center space-x-3 px-3 py-2 rounded-full cursor-pointer hover:bg-gray-100 transition-all duration-300">
+                            <div class="user-avatar flex items-center justify-center">
+                                <img src="{{ url_for('static', filename='img/default.svg') }}" alt="User" class="w-full h-full object-cover">
+                            </div>
+                            <div class="hidden md:block">
+                                <p class="text-sm font-medium text-gray-800">Hello, {{ current_user.username }}</p>
+                            </div>
+                            <!-- Subtle shadow instead of arrow -->
+                            <div class="w-5 h-5 bg-gradient-to-b from-transparent to-gray-200 rounded-full opacity-50"></div>
+                        </div>
+                        
+                        <!-- User dropdown menu -->
+                        <div class="user-dropdown">
+                            <div class="py-2 border-b border-gray-100">
+                                <p class="px-4 text-xs text-gray-500">Akun Pengguna</p>
+                                <div class="px-4 py-2">
+                                    <p class="font-medium text-gray-900">{{ current_user.username }}</p>
+                                    <p class="text-sm text-gray-500">{{ current_user.email }}</p>
+                                </div>
+                            </div>
+                            <div class="py-1">
+                                <a href="/dashboard" class="user-dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                    </svg>
+                                    Dashboard Admin
+                                </a>
+                                <a href="/logout" class="user-dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                    Keluar Akun
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- Login Button if not logged in -->
+                    <a href="/login" class="btn-masuk">Masuk</a>
+                    {% endif %}
+                    
+                    <!-- Toggle Button -->
+                    <button id="toggleTopbar" class="hidden md:block text-gray-600 focus:outline-none hover:text-purple-600 transition-colors p-2 rounded-full hover:bg-purple-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 toggle-icon icon-collapsed" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Menu Section - Improved with less padding -->
+        <div id="navSection" class="nav-section nav-hidden">
+            <div class="container mx-auto px-4 md:px-8">
+                <div id="navContainer" class="nav-container flex flex-wrap md:flex-nowrap md:items-center md:justify-center space-x-0 md:space-x-4 lg:space-x-6 py-1">
+                    {% set active_page = request.path %}
+                    <a href="/" class="nav-link {% if active_page == '/' %}nav-link-active{% endif %} flex items-center text-{% if active_page == '/' %}purple-600{% else %}gray-700{% endif %} transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        Beranda
+                    </a>
+                    
+                    <!-- Dropdown for Peta Klasterisasi - Check if active page contains map/ -->
+                    <div class="dropdown relative group">
+                        <button class="dropdown-toggle nav-link {% if '/map/' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/map/' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                            </svg>
+                            Peta Klaster Wilayah
+                        </button>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-10">
+                            <a href="/map/sma" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 {% if '/map/sma' in active_page %}text-purple-600 bg-purple-50{% endif %}">
+                                Peta SMA
+                            </a>
+                            <a href="/map/smk" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 {% if '/map/smk' in active_page %}text-purple-600 bg-purple-50{% endif %}">
+                                Peta SMK
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <a href="/data" class="nav-link {% if '/data' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/data' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                        </svg>
+                        Data Wilayah
+                    </a>
+                    
+                    <a href="/clustering" class="nav-link {% if '/clustering' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/clustering' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        Klasterisasi Wilayah
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content content-collapsed">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- JavaScript for Topbar Toggle with Animation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const topbar = document.getElementById('topbar');
+            const navSection = document.getElementById('navSection');
+            const toggleBtn = document.getElementById('toggleTopbar');
+            const mobileMenuBtn = document.getElementById('mobileMenuButton');
+            const navContainer = document.getElementById('navContainer');
+            const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+            const mainContent = document.getElementById('mainContent');
+            let isCollapsed = true; // Default to collapsed state
+            
+            // Function to toggle navigation
+            function toggleNav() {
+                if (isCollapsed) {
+                    // Expand topbar with animation
+                    topbar.classList.remove('topbar-collapsed');
+                    topbar.classList.add('topbar-expanded');
+                    
+                    // Add a small delay for sequential animation
+                    setTimeout(() => {
+                        navSection.classList.remove('nav-hidden');
+                        navSection.classList.add('nav-visible');
+                    }, 100);
+                    
+                    // Adjust content
+                    mainContent.classList.remove('content-collapsed');
+                    mainContent.classList.add('content-expanded');
+                    
+                    // Rotate icon
+                    if (toggleIcon) toggleIcon.classList.remove('icon-collapsed');
+                } else {
+                    // Collapse topbar with animation
+                    navSection.classList.remove('nav-visible');
+                    navSection.classList.add('nav-hidden');
+                    
+                    // Add a small delay for sequential animation
+                    setTimeout(() => {
+                        topbar.classList.remove('topbar-expanded');
+                        topbar.classList.add('topbar-collapsed');
+                    }, 100);
+                    
+                    // Adjust content
+                    mainContent.classList.remove('content-expanded');
+                    mainContent.classList.add('content-collapsed');
+                    
+                    // Rotate icon
+                    if (toggleIcon) toggleIcon.classList.add('icon-collapsed');
+                }
+                
+                isCollapsed = !isCollapsed;
+            }
+            
+            // Desktop toggle button
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', toggleNav);
+            }
+            
+            // Mobile menu toggle
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navContainer.classList.toggle('menu-open');
+                    // Adjust for mobile view
+                    if (window.innerWidth < 768) {
+                        toggleNav();
+                    }
+                });
+            }
+            
+            // Handle window resize for responsive adjustments
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768 && navContainer.classList.contains('menu-open')) {
+                    navContainer.classList.remove('menu-open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

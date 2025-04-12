@@ -1,0 +1,545 @@
+:root {
+    --purple600: #7e56d8;
+    --purple700: #6840c6;
+    --purple300: #d6bbfb;
+    --grey900: #111415;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Background decorations pada root halaman */
+.page-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.bg-decoration {
+    position: absolute;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.bg-decoration.circle1 {
+    top: 10%;
+    left: 5%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.8) 0%, rgba(139, 92, 246, 0) 70%);
+    animation: float 15s ease-in-out infinite;
+}
+
+.bg-decoration.circle2 {
+    bottom: 10%;
+    right: 5%;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.8) 0%, rgba(139, 92, 246, 0) 70%);
+    animation: float 12s ease-in-out infinite reverse;
+}
+
+.bg-decoration.rect1 {
+    top: 25%;
+    right: 15%;
+    width: 200px;
+    height: 200px;
+    border-radius: 30px;
+    background: rgba(139, 92, 246, 0.3);
+    transform: rotate(15deg);
+    animation: rotate 20s linear infinite;
+}
+
+.bg-decoration.rect2 {
+    bottom: 25%;
+    left: 15%;
+    width: 180px;
+    height: 180px;
+    background: rgba(139, 92, 246, 0.2);
+    transform: rotate(45deg);
+    animation: rotate 25s linear infinite reverse;
+}
+
+.bg-decoration.hex1 {
+    top: 60%;
+    left: 30%;
+    width: 120px;
+    height: 120px;
+    background: rgba(139, 92, 246, 0.25);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    animation: float 18s ease-in-out infinite 2s;
+}
+
+.bg-decoration.hex2 {
+    top: 20%;
+    right: 30%;
+    width: 150px;
+    height: 150px;
+    background: rgba(139, 92, 246, 0.15);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    animation: float 14s ease-in-out infinite 1s;
+}
+
+.bg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.2;
+}
+
+.bg-particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.bg-particle {
+    position: absolute;
+    opacity: 0.3;
+    animation: bgFloat 20s linear infinite;
+}
+
+@keyframes bgFloat {
+    0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.3;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-100px) translateX(100px);
+        opacity: 0;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-30px) rotate(5deg);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Login container */
+.login-container {
+    display: flex;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 900px;
+    max-width: 95%;
+    overflow: hidden;
+    height: 550px;
+    position: relative;
+    z-index: 2;
+}
+
+.login-image {
+    flex: 1;
+    background-color: var(--purple600);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background SVG mengisi seluruh area */
+.login-bg-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    object-fit: cover;
+}
+
+/* Overlay ungu di atas SVG */
+.login-image .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(104, 64, 198, 0.85), rgba(126, 86, 216, 0.8));
+    z-index: 2;
+}
+
+/* Pattern grid di atas overlay */
+.pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+    z-index: 3;
+}
+
+/* Konten teks di atas semua layer */
+.login-image-content {
+    position: relative;
+    z-index: 4;
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.login-image-content .title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.login-image-content .subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    max-width: 80%;
+}
+
+.login-form {
+    flex: 1;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-header {
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.login-header img {
+    max-width: 200px;
+    margin-bottom: 1.5rem;
+}
+
+.login-header h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.login-header p {
+    color: #666;
+}
+
+.waving-hand {
+    animation: wave 2.5s infinite;
+    transform-origin: 70% 70%;
+    display: inline-block;
+}
+
+@keyframes wave {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(16deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(16deg); }
+    40% { transform: rotate(-8deg); }
+    50% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-color: var(--purple600);
+    box-shadow: 0 0 0 3px rgba(126, 86, 216, 0.2);
+    outline: none;
+}
+
+.btn-primary {
+    background-color: var(--purple600);
+    color: white;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 1rem;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.btn-primary:hover {
+    background-color: var(--purple700);
+    transform: translateY(-2px);
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
+
+.btn-primary:hover::after {
+    left: 100%;
+}
+
+.form-footer {
+    margin-top: 2.5rem;
+    text-align: center;
+    color: #666;
+    font-size: 0.875rem;
+    position: relative;
+    z-index: 1;
+}
+
+.form-footer a {
+    color: var(--purple600);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+.password-options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.password-options a {
+    color: var(--purple600);
+    text-decoration: none;
+}
+
+.password-options a:hover {
+    text-decoration: underline;
+}
+
+/* Snackbar for error messages */
+.snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: var(--danger-light);
+    color: var(--danger);
+    text-align: center;
+    border-radius: 8px;
+    padding: 12px;
+    position: fixed;
+    z-index: 100;
+    bottom: 30px;
+    right: 30px;
+    font-size: 0.9rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 4px solid var(--danger);
+}
+
+.snackbar.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 3.5s;
+}
+
+.snackbar-icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.snackbar-close {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.snackbar-close:hover {
+    opacity: 1;
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+/* Pulse effect for the button */
+.pulse-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 8px;
+    box-shadow: 0 0 0 0 rgba(126, 86, 216, 0.7);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(126, 86, 216, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(126, 86, 216, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(126, 86, 216, 0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .login-image {
+        display: none;
+    }
+    
+    .login-form {
+        padding: 2rem 1.5rem;
+    }
+    
+    .snackbar {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        width: calc(100% - 40px);
+        min-width: unset;
+    }
+    
+    @keyframes fadein {
+        from {
+            bottom: 0;
+            opacity: 0;
+        }
+        to {
+            bottom: 20px;
+            opacity: 1;
+        }
+    }
+    
+    @keyframes fadeout {
+        from {
+            bottom: 20px;
+            opacity: 1;
+        }
+        to {
+            bottom: 0;
+            opacity: 0;
+        }
+    }
+}

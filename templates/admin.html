@@ -1,0 +1,99 @@
+<!-- templates/admin.html -->
+{% extends "layout.html" %}
+
+{% block title %}Admin Dashboard - Klasterisasi{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-6 my-4">
+    <h2 class="text-2xl font-bold mb-4">Panel Admin Klasterisasi</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Klasterisasi SMA -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-semibold mb-3">Klasterisasi Data SMA</h3>
+            <form id="clusterFormSMA" class="space-y-4">
+                <input type="hidden" name="type" value="sma">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Jumlah Klaster</label>
+                    <input type="number" name="n_clusters" value="3" min="2" max="10" 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                </div>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                    Jalankan Klasterisasi
+                </button>
+            </form>
+            <div id="resultSMA" class="mt-4"></div>
+        </div>
+        
+        <!-- Klasterisasi SMK -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-semibold mb-3">Klasterisasi Data SMK</h3>
+            <form id="clusterFormSMK" class="space-y-4">
+                <input type="hidden" name="type" value="smk">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Jumlah Klaster</label>
+                    <input type="number" name="n_clusters" value="3" min="2" max="10" 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                </div>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                    Jalankan Klasterisasi
+                </button>
+            </form>
+            <div id="resultSMK" class="mt-4"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to handle form submission
+    function handleFormSubmit(formId, resultId) {
+        const form = document.getElementById(formId);
+        const resultDiv = document.getElementById(resultId);
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading indicator
+            resultDiv.innerHTML = '<div class="text-center"><div class="spinner-border text-blue-500" role="status"></div><p class="mt-2">Memproses klasterisasi...</p></div>';
+            
+            try {
+                const formData = new FormData(form);
+                
+                const response = await fetch('/run_clustering', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    resultDiv.innerHTML = `
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4">
+                            <p>${data.message}</p>
+                            <p class="mt-2 text-sm">File: ${data.file_path}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-4">
+                            <p>Error: ${data.message}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-4">
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+    }
+    
+    // Initialize form handlers
+    handleFormSubmit('clusterFormSMA', 'resultSMA');
+    handleFormSubmit('clusterFormSMK', 'resultSMK');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUCLUSTER - Masuk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <!-- Background decorations pada root halaman -->
+    <div class="page-background">
+        <!-- Grid background -->
+        <div class="bg-grid"></div>
+        
+        <!-- Large decorative shapes -->
+        <div class="bg-decoration circle1"></div>
+        <div class="bg-decoration circle2"></div>
+        <div class="bg-decoration rect1"></div>
+        <div class="bg-decoration rect2"></div>
+        <div class="bg-decoration hex1"></div>
+        <div class="bg-decoration hex2"></div>
+        
+        <!-- Background particles -->
+        <div class="bg-particles-container" id="bg-particles-container"></div>
+    </div>
+    
+    <div class="login-container">
+        <!-- Left Side - Image with BG and Overlay -->
+        <div class="login-image">
+            <!-- Background SVG -->
+            <img src="{{ url_for('static', filename='img/login-bg.svg') }}" alt="Background" class="login-bg-svg">
+            
+            <!-- Purple overlay -->
+            <div class="overlay"></div>
+            
+            <!-- Grid pattern -->
+            <div class="pattern"></div>
+            
+            <!-- Teks konten -->
+            <div class="login-image-content">
+                <h2 class="title">EDUCLUSTER</h2>
+                <p class="subtitle">Visualisasikan pendidikan berkualitas, ciptakan kesetaraan antar wilayah</p>
+            </div>
+        </div>
+        
+        <!-- Right Side - Login Form -->
+        <div class="login-form">
+            <div class="login-header">
+                <img src="{{ url_for('static', filename='img/educluster-fullcolor.png') }}" alt="EDUCLUSTER Logo">
+                <h1>Selamat Datang Kembali <span class="waving-hand">👋</span></h1>
+                <p>Silakan masukkan kredensial Anda untuk melanjutkan</p>
+            </div>
+            
+            <form method="POST" id="loginForm">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    <label for="username">Nama Pengguna</label>
+                    {{ form.username(class="form-control", placeholder="Masukkan nama pengguna") }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Kata Sandi</label>
+                    {{ form.password(class="form-control", placeholder="Masukkan kata sandi") }}
+                </div>
+                
+                <div class="password-options">
+                    <a href="#">Lupa kata sandi?</a>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    <div class="pulse-effect"></div>
+                    Masuk
+                </button>
+            </form>
+            
+            <div class="form-footer">
+                Belum punya akun? <a href="{{ url_for('register') }}">Daftar sekarang</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Snackbar for error messages -->
+    <div id="snackbar" class="snackbar">
+        <div style="display: flex; align-items: center;">
+            <span class="snackbar-icon">⚠️</span>
+            <span id="snackbar-message"></span>
+        </div>
+        <span class="snackbar-close" onclick="closeSnackbar()">×</span>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

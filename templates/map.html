@@ -1,0 +1,373 @@
+{% extends "layout.html" %}
+
+{% block title %}Peta Klasterisasi Pendidikan{% endblock %}
+
+{% block content %}
+<div class="py-4">
+    <!-- Header with title and breadcrumb -->
+    <div class="mb-4">
+        <h1 class="text-2xl font-bold text-gray-800">Peta Klasterisasi Wilayah Kecamatan Surabaya dengan Indikator Pendidikan</h1>
+        <div class="flex items-center text-sm text-gray-500 mt-1">
+            <a href="/" class="hover:text-indigo-600">Beranda</a>
+            <svg class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <span>Peta Klasterisasi</span>
+        </div>
+    </div>
+    
+    <!-- Main content with status message -->
+    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+        <!-- Left side: Status message and map (2/3 width) -->
+        <div class="md:w-2/3">
+            <!-- Status message -->
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r mb-4">
+                <div class="flex">
+                    <svg class="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                    <p id="mapStatus" class="ml-3 text-base font-bold text-blue-700">
+                        Menampilkan hasil klasterisasi SMA untuk seluruh klaster
+                    </p>
+                </div>
+            </div>
+
+            <!-- Map container -->
+            <div id="mapContainer" class="bg-white rounded-lg shadow overflow-hidden" style="height: 620px;">
+                <iframe id="mapFrame" src="{{ map_file }}" class="w-full h-full border-0"></iframe>
+            </div>
+        </div>
+        
+        <!-- Right side: Tabs and controls (1/3 width) -->
+        <div class="md:w-1/3">
+            <!-- White tab navigation with blue hover/active -->
+            <div class="bg-white rounded-t-lg shadow flex overflow-hidden">
+                <button id="tabControls" class="py-3 px-6 font-bold border-b-2 border-blue-500 text-blue-600 flex-1 focus:outline-none">Kontrol</button>
+                <button id="tabKlasteristik" class="py-3 px-6 font-bold border-b-2 border-transparent text-gray-500 hover:text-blue-500 flex-1 focus:outline-none">Karakteristik</button>
+            </div>
+            
+            <!-- Content container -->
+            <div class="bg-white rounded-b-lg shadow">
+                <!-- Tab 1: Controls -->
+                <div id="tabControlsContent" class="p-4">
+                    <!-- Pilih Instansi -->
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-700 mb-3">Pilih Instansi</h2>
+                        <div class="flex rounded-md overflow-hidden shadow-sm">
+                            <button id="smaButton" class="flex-1 py-2 px-4 bg-blue-500 text-white">SMA</button>
+                            <button id="smkButton" class="flex-1 py-2 px-4 bg-gray-200 text-gray-700">SMK</button>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <!-- Pilih Klaster -->
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-700 mb-3">Pilih Klaster</h2>
+                        <div class="flex gap-2">
+                            <!-- Klaster 0 -->
+                            <label class="flex-1 flex items-center p-2 bg-gray-50 border border-gray-200 rounded cursor-pointer">
+                                <input type="checkbox" id="cluster0" class="h-4 w-4" value="0" checked>
+                                <div class="ml-2 flex items-center">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                    <span class="text-sm">Klaster 0</span>
+                                </div>
+                            </label>
+                            
+                            <!-- Klaster 1 -->
+                            <label class="flex-1 flex items-center p-2 bg-gray-50 border border-gray-200 rounded cursor-pointer">
+                                <input type="checkbox" id="cluster1" class="h-4 w-4" value="1" checked>
+                                <div class="ml-2 flex items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full mr-1"></div>
+                                    <span class="text-sm">Klaster 1</span>
+                                </div>
+                            </label>
+                            
+                            <!-- Klaster 2 -->
+                            <label class="flex-1 flex items-center p-2 bg-gray-50 border border-gray-200 rounded cursor-pointer">
+                                <input type="checkbox" id="cluster2" class="h-4 w-4" value="2" checked>
+                                <div class="ml-2 flex items-center">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full mr-1"></div>
+                                    <span class="text-sm">Klaster 2</span>
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Total ditampilkan: <span id="totalClusters">{{ cluster_counts.values()|sum }}</span> instansi</p>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <!-- Distribusi Klaster -->
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-700 mb-3">Distribusi Klaster</h2>
+                        
+                        <!-- Klaster 0 -->
+                        <div class="mb-4">
+                            <div class="flex justify-between mb-1">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
+                                    <span class="font-medium">Klaster 0</span>
+                                </div>
+                                <div class="flex items-baseline">
+                                    <span id="count0" class="text-xl font-bold text-gray-800 mr-1">{{ cluster_counts.get(0, 0) }}</span>
+                                    <span class="text-sm text-gray-500">kluster</span>
+                                </div>
+                            </div>
+                            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div id="progress0" class="h-2 bg-red-500 rounded-full" style="width: {{ (cluster_counts.get(0, 0) / (cluster_counts.values()|sum)) * 100 if cluster_counts.values()|sum > 0 else 0 }}%"></div>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500 text-right">
+                                <span id="percent0">{{ ((cluster_counts.get(0, 0) / (cluster_counts.values()|sum)) * 100)|round|int if cluster_counts.values()|sum > 0 else 0 }}%</span> dari total instansi
+                            </div>
+                        </div>
+                        
+                        <!-- Klaster 1 -->
+                        <div class="mb-4">
+                            <div class="flex justify-between mb-1">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 bg-blue-500 rounded-full mr-2"></div>
+                                    <span class="font-medium">Klaster 1</span>
+                                </div>
+                                <div class="flex items-baseline">
+                                    <span id="count1" class="text-xl font-bold text-gray-800 mr-1">{{ cluster_counts.get(1, 0) }}</span>
+                                    <span class="text-sm text-gray-500">kluster</span>
+                                </div>
+                            </div>
+                            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div id="progress1" class="h-2 bg-blue-500 rounded-full" style="width: {{ (cluster_counts.get(1, 0) / (cluster_counts.values()|sum)) * 100 if cluster_counts.values()|sum > 0 else 0 }}%"></div>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500 text-right">
+                                <span id="percent1">{{ ((cluster_counts.get(1, 0) / (cluster_counts.values()|sum)) * 100)|round|int if cluster_counts.values()|sum > 0 else 0 }}%</span> dari total instansi
+                            </div>
+                        </div>
+                        
+                        <!-- Klaster 2 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 bg-green-500 rounded-full mr-2"></div>
+                                    <span class="font-medium">Klaster 2</span>
+                                </div>
+                                <div class="flex items-baseline">
+                                    <span id="count2" class="text-xl font-bold text-gray-800 mr-1">{{ cluster_counts.get(2, 0) }}</span>
+                                    <span class="text-sm text-gray-500">kluster</span>
+                                </div>
+                            </div>
+                            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div id="progress2" class="h-2 bg-green-500 rounded-full" style="width: {{ (cluster_counts.get(2, 0) / (cluster_counts.values()|sum)) * 100 if cluster_counts.values()|sum > 0 else 0 }}%"></div>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500 text-right">
+                                <span id="percent2">{{ ((cluster_counts.get(2, 0) / (cluster_counts.values()|sum)) * 100)|round|int if cluster_counts.values()|sum > 0 else 0 }}%</span> dari total instansi
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 2: Characteristics -->
+                <div id="tabKlasteristikContent" class="p-4 hidden">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-5">Karakteristik Klaster Pendidikan</h2>
+                    
+                    <!-- Klaster 0 -->
+                    <div class="mb-5 pb-5 border-b border-gray-200">
+                        <h3 class="text-base font-semibold text-red-700 flex items-center mb-2">
+                            <div class="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
+                            Klaster 0
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-2">
+                            Kecamatan dengan tingkat pendidikan menengah rendah, persentase kelulusan rendah, dan rasio guru-murid tinggi.
+                        </p>
+                        <ul class="list-disc ml-5 text-sm text-gray-600">
+                            <li class="mb-1">Tingkat partisipasi sekolah di bawah 85%</li>
+                            <li class="mb-1">Persentase kelulusan di bawah 90%</li>
+                            <li>Rasio guru-murid 1:35 atau lebih tinggi</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Klaster 1 -->
+                    <div class="mb-5 pb-5 border-b border-gray-200">
+                        <h3 class="text-base font-semibold text-blue-700 flex items-center mb-2">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full mr-2"></div>
+                            Klaster 1
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-2">
+                            Kecamatan dengan tingkat pendidikan menengah sedang, persentase kelulusan sedang, dan rasio guru-murid seimbang.
+                        </p>
+                        <ul class="list-disc ml-5 text-sm text-gray-600">
+                            <li class="mb-1">Tingkat partisipasi sekolah antara 85-95%</li>
+                            <li class="mb-1">Persentase kelulusan antara 90-97%</li>
+                            <li>Rasio guru-murid antara 1:25 hingga 1:35</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Klaster 2 -->
+                    <div>
+                        <h3 class="text-base font-semibold text-green-700 flex items-center mb-2">
+                            <div class="w-4 h-4 bg-green-500 rounded-full mr-2"></div>
+                            Klaster 2
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-2">
+                            Kecamatan dengan tingkat pendidikan menengah tinggi, persentase kelulusan tinggi, dan rasio guru-murid optimal.
+                        </p>
+                        <ul class="list-disc ml-5 text-sm text-gray-600">
+                            <li class="mb-1">Tingkat partisipasi sekolah di atas 95%</li>
+                            <li class="mb-1">Persentase kelulusan di atas 97%</li>
+                            <li>Rasio guru-murid kurang dari 1:25</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    var els = {
+        mapFrame: document.getElementById('mapFrame'),
+        mapContainer: document.getElementById('mapContainer'),
+        smaButton: document.getElementById('smaButton'),
+        smkButton: document.getElementById('smkButton'),
+        cluster0: document.getElementById('cluster0'),
+        cluster1: document.getElementById('cluster1'),
+        cluster2: document.getElementById('cluster2'),
+        mapStatus: document.getElementById('mapStatus'),
+        totalClusters: document.getElementById('totalClusters'),
+        tabControls: document.getElementById('tabControls'),
+        tabKlasteristik: document.getElementById('tabKlasteristik'),
+        tabControlsContent: document.getElementById('tabControlsContent'),
+        tabKlasteristikContent: document.getElementById('tabKlasteristikContent')
+    };
+    
+    // State
+    var state = {
+        mapType: 'sma',
+        activeTab: 'controls'
+    };
+    
+    // Functions
+    function switchTab(tab) {
+        state.activeTab = tab;
+        
+        if (tab === 'controls') {
+            els.tabControlsContent.classList.remove('hidden');
+            els.tabKlasteristikContent.classList.add('hidden');
+            
+            els.tabControls.classList.add('border-blue-500', 'text-blue-600');
+            els.tabControls.classList.remove('border-transparent', 'text-gray-500');
+            
+            els.tabKlasteristik.classList.add('border-transparent', 'text-gray-500');
+            els.tabKlasteristik.classList.remove('border-blue-500', 'text-blue-600');
+        } else {
+            els.tabKlasteristikContent.classList.remove('hidden');
+            els.tabControlsContent.classList.add('hidden');
+            
+            els.tabKlasteristik.classList.add('border-blue-500', 'text-blue-600');
+            els.tabKlasteristik.classList.remove('border-transparent', 'text-gray-500');
+            
+            els.tabControls.classList.add('border-transparent', 'text-gray-500');
+            els.tabControls.classList.remove('border-blue-500', 'text-blue-600');
+        }
+    }
+    
+    function updateMap() {
+        // Get selected clusters
+        var selectedClusters = [];
+        if (els.cluster0.checked) selectedClusters.push('0');
+        if (els.cluster1.checked) selectedClusters.push('1');
+        if (els.cluster2.checked) selectedClusters.push('2');
+        
+        // If none selected, select all
+        if (selectedClusters.length === 0) {
+            els.cluster0.checked = true;
+            els.cluster1.checked = true;
+            els.cluster2.checked = true;
+            selectedClusters = ['0', '1', '2'];
+        }
+        
+        // Update map
+        els.mapFrame.src = '/api/map/' + state.mapType + '?clusters=' + selectedClusters.join(',');
+        
+        // Update status
+        var typeText = state.mapType === 'sma' ? 'SMA' : 'SMK';
+        var clusterText = selectedClusters.length === 3 ? 'seluruh klaster' : 
+                         selectedClusters.length === 1 ? 'klaster ' + selectedClusters[0] : 
+                         'klaster ' + selectedClusters.join(' dan ');
+        
+        els.mapStatus.textContent = 'Menampilkan hasil klasterisasi ' + typeText + ' untuk ' + clusterText;
+        
+        // Fetch data
+        fetchClusterCounts(selectedClusters);
+    }
+    
+    function switchMapType(type) {
+        if (state.mapType === type) return;
+        
+        state.mapType = type;
+        
+        if (type === 'sma') {
+            els.smaButton.className = 'flex-1 py-2 px-4 bg-blue-500 text-white';
+            els.smkButton.className = 'flex-1 py-2 px-4 bg-gray-200 text-gray-700';
+        } else {
+            els.smkButton.className = 'flex-1 py-2 px-4 bg-blue-500 text-white';
+            els.smaButton.className = 'flex-1 py-2 px-4 bg-gray-200 text-gray-700';
+        }
+        
+        updateMap();
+    }
+    
+    function fetchClusterCounts(selectedClusters) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/cluster-counts/' + state.mapType + '?clusters=' + selectedClusters.join(','), true);
+        
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                var data = JSON.parse(xhr.responseText);
+                
+                var counts = {
+                    0: data['0'] || 0,
+                    1: data['1'] || 0,
+                    2: data['2'] || 0
+                };
+                
+                var total = counts[0] + counts[1] + counts[2];
+                
+                // Update counts
+                document.getElementById('count0').textContent = counts[0];
+                document.getElementById('count1').textContent = counts[1];
+                document.getElementById('count2').textContent = counts[2];
+                els.totalClusters.textContent = total;
+                
+                // Update progress bars
+                for (var i = 0; i < 3; i++) {
+                    var percent = Math.round((counts[i] / total) * 100);
+                    document.getElementById('progress' + i).style.width = percent + '%';
+                    document.getElementById('percent' + i).textContent = percent + '%';
+                }
+            }
+        };
+        
+        xhr.send();
+    }
+    
+    // Event listeners
+    els.tabControls.addEventListener('click', function() { switchTab('controls'); });
+    els.tabKlasteristik.addEventListener('click', function() { switchTab('karakteristik'); });
+    
+    els.smaButton.addEventListener('click', function() { switchMapType('sma'); });
+    els.smkButton.addEventListener('click', function() { switchMapType('smk'); });
+    
+    els.cluster0.addEventListener('change', updateMap);
+    els.cluster1.addEventListener('change', updateMap);
+    els.cluster2.addEventListener('change', updateMap);
+    
+    // Initialize
+    switchTab('controls');
+    
+    // Check initial map type
+    if (els.mapFrame.src.indexOf('map_smk.html') !== -1) {
+        switchMapType('smk');
+    }
+});
+</script>
+{% endblock %}
