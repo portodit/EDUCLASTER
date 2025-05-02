@@ -21,8 +21,19 @@
         <div class="bg-decoration hex1"></div>
         <div class="bg-decoration hex2"></div>
         
+        <!-- Floating decoration elements -->
+        <div class="floating-shape animate-float"></div>
+        <div class="floating-shape-reverse animate-float-alt"></div>
+        <div class="animate-pulse-slow decoration-blob"></div>
+        
         <!-- Background particles -->
         <div class="bg-particles-container" id="bg-particles-container"></div>
+        
+        <!-- Tambahan dekorasi bergerak -->
+        <div class="moving-shape shape1"></div>
+        <div class="moving-shape shape2"></div>
+        <div class="moving-shape shape3"></div>
+        <div class="moving-shape shape4"></div>
     </div>
     
     <div class="login-container">
@@ -35,20 +46,14 @@
             <div class="overlay"></div>
             
             <!-- Grid pattern -->
-            <div class="pattern"></div>
-            
-            <!-- Teks konten -->
-            <div class="login-image-content">
-                <h2 class="title">EDUCLUSTER</h2>
-                <p class="subtitle">Visualisasikan pendidikan berkualitas, ciptakan kesetaraan antar wilayah</p>
-            </div>
+            <div class="pattern grid-lines"></div>
         </div>
         
         <!-- Right Side - Login Form -->
         <div class="login-form">
             <div class="login-header">
-                <img src="{{ url_for('static', filename='img/educluster-fullcolor.png') }}" alt="EDUCLUSTER Logo">
-                <h1>Selamat Datang Kembali <span class="waving-hand">👋</span></h1>
+                <img src="{{ url_for('static', filename='img/educluster-fullcolor.png') }}" alt="EDUCLUSTER Logo" class="logo-glow">
+                <h2>Selamat Datang Kembali <span class="waving-hand">👋</span></h2>
                 <p>Silakan masukkan kredensial Anda untuk melanjutkan</p>
             </div>
             
@@ -69,14 +74,13 @@
                     <a href="#">Lupa kata sandi?</a>
                 </div>
                 
-                <button type="submit" class="btn-primary">
-                    <div class="pulse-effect"></div>
+                <button type="submit" class="btn-masuk">
                     Masuk
                 </button>
             </form>
             
-            <div class="form-footer">
-                Belum punya akun? <a href="{{ url_for('register') }}">Daftar sekarang</a>
+            <div class="register-link">
+                <a href="{{ url_for('register') }}">Belum punya akun? Daftar sekarang</a>
             </div>
         </div>
     </div>

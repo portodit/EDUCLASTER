@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="E:\TA (Lulus Tepat Waktu)\DASHBOARD\dashboard_cluster1_new\dashboard_cluster1_new\venv"
+VIRTUAL_ENV="E:\TA (Lulus Tepat Waktu)\DASHBOARD\dashboard_cluster1_new\educluster\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

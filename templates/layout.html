@@ -21,6 +21,26 @@
             overflow-x: hidden;
         }
         
+        /* Modern scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.5);
+        }
+        
         .topbar {
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             background-color: white;
@@ -52,8 +72,8 @@
         .nav-visible {
             opacity: 1;
             transform: translateY(0);
-            padding-top: 0.5rem; /* Reduced padding-top */
-            padding-bottom: 0.5rem; /* Reduced padding-bottom */
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
         }
         
         .toggle-icon {
@@ -82,7 +102,7 @@
         }
         
         .content-expanded {
-            margin-top: 120px; /* Reduced margin-top */
+            margin-top: 120px;
         }
         
         .content-collapsed {
@@ -102,7 +122,8 @@
             transition: transform 0.3s ease-in-out;
         }
         
-        .dropdown:hover .dropdown-toggle::after {
+        .dropdown:hover .dropdown-toggle::after,
+        .dropdown.active .dropdown-toggle::after {
             transform: rotate(180deg);
         }
         
@@ -113,7 +134,8 @@
             transform: translateY(-10px);
         }
         
-        .dropdown:hover .dropdown-menu {
+        .dropdown:hover .dropdown-menu,
+        .dropdown.active .dropdown-menu {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
@@ -148,11 +170,11 @@
         .nav-link {
             position: relative;
             transition: all 0.3s ease;
-            padding: 0.4rem 0.75rem; /* Reduced padding */
+            padding: 0.4rem 0.75rem;
             border-radius: 0.375rem;
             display: flex;
             align-items: center;
-            margin-bottom: 0; /* Remove bottom margin */
+            margin-bottom: 0;
         }
         
         .nav-link:hover {
@@ -173,17 +195,17 @@
         .nav-link-active::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 60%;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
             height: 2px;
             background: var(--purple600);
-            transform: translateX(-50%);
+            transform: none;
             transition: width 0.3s ease;
         }
         
         .nav-link-active:hover::after {
-            width: 80%;
+            width: 100%;
         }
 
         /* User avatar style */
@@ -220,7 +242,8 @@
             z-index: 100;
         }
 
-        .user-container:hover .user-dropdown {
+        .user-container:hover .user-dropdown,
+        .user-container.active .user-dropdown {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
@@ -245,12 +268,71 @@
         
         /* Compact spacing for nav items */
         .nav-container {
-            gap: 0.5rem; /* Small gap between items */
+            gap: 0.5rem;
         }
         
         .nav-container a, .nav-container button {
-            margin: 0; /* Remove margins */
-            white-space: nowrap; /* Prevent text wrapping */
+            margin: 0;
+            white-space: nowrap;
+        }
+        
+        /* Mobile menu button */
+        .mobile-menu-button {
+            display: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-button:hover {
+            background-color: rgba(126, 86, 216, 0.05);
+        }
+        
+        .mobile-menu-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+        
+        .mobile-menu-icon span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: #4B5563;
+            border-radius: 2px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+        
+        .mobile-menu-icon span:nth-child(1) {
+            top: 5px;
+        }
+        
+        .mobile-menu-icon span:nth-child(2) {
+            top: 12px;
+        }
+        
+        .mobile-menu-icon span:nth-child(3) {
+            top: 19px;
+        }
+        
+        .active .mobile-menu-icon span:nth-child(1) {
+            top: 12px;
+            transform: rotate(135deg);
+        }
+        
+        .active .mobile-menu-icon span:nth-child(2) {
+            opacity: 0;
+            left: -60px;
+        }
+        
+        .active .mobile-menu-icon span:nth-child(3) {
+            top: 12px;
+            transform: rotate(-135deg);
         }
         
         /* Responsive navigation */
@@ -260,20 +342,22 @@
                 align-items: flex-start;
                 width: 100%;
                 gap: 0.25rem;
+                padding: 0.5rem 0;
             }
             
             .mobile-menu-button {
-                display: block;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
             .desktop-menu {
                 display: none;
                 width: 100%;
-                flex-direction: column;
             }
             
             .menu-open .desktop-menu {
-                display: flex;
+                display: block;
                 animation: slideDown 0.3s ease-out;
             }
             
@@ -281,6 +365,16 @@
                 width: 100%;
                 padding: 0.75rem 1rem;
                 margin: 0.25rem 0;
+                justify-content: flex-start;
+            }
+            
+            .dropdown {
+                width: 100%;
+            }
+            
+            .dropdown-toggle {
+                justify-content: space-between;
+                width: 100%;
             }
 
             .dropdown-menu {
@@ -288,32 +382,205 @@
                 width: 100%;
                 box-shadow: none;
                 margin: 0.25rem 0;
-                padding: 0 0 0 2rem;
+                padding: 0.5rem;
                 background-color: rgba(126, 86, 216, 0.03);
+                border-radius: 0.375rem;
             }
             
-            .dropdown:hover .dropdown-menu {
+            .dropdown.active .dropdown-menu {
                 display: block;
-                border-radius: 0.25rem;
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
+            }
+            
+            .topbar-expanded {
+                height: auto;
             }
             
             .user-dropdown {
                 width: 100%;
                 position: static;
                 box-shadow: none;
-                margin-top: 1rem;
+                margin-top: 0.5rem;
                 border: 1px solid rgba(0,0,0,0.1);
             }
             
-            .content-expanded {
-                margin-top: auto;
+            .user-container.active .user-dropdown {
+                display: block;
             }
             
-            @keyframes slideDown {
-                from { opacity: 0; transform: translateY(-10px); }
-                to { opacity: 1; transform: translateY(0); }
+            /* Sembunyikan tombol masuk di header saat tampilan mobile */
+            .mobile-hide-btn {
+                display: none;
+            }
+            
+            /* Style untuk tombol masuk di dalam mobile menu */
+            .menu-btn-masuk {
+                background-color: var(--purple600);
+                color: white;
+                border-radius: 0.5rem;
+                padding: 0.75rem 1rem;
+                font-weight: 600;
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+                box-shadow: 0 4px 15px rgba(126, 86, 216, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 8px 0;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .menu-btn-masuk:hover {
+                background-color: var(--purple700);
+                transform: translateY(-1px);
+            }
+            
+            /* Mobile Navigation Container */
+            .mobile-nav-container {
+                width: 100%;
+                overflow: hidden;
+                max-height: 0;
+                transition: max-height 0.4s ease-in-out, opacity 0.3s ease;
+                opacity: 0;
+                background-color: white;
+                border-top: 1px solid rgba(229, 231, 235, 0.5);
+            }
+            
+            .mobile-nav-container.open {
+                max-height: 1000px; /* Value will be dynamically set by JS */
+                opacity: 1;
+            }
+            
+            /* Mobile menu button animation */
+            .mobile-menu-button {
+                display: none;
+                cursor: pointer;
+                padding: 0.5rem;
+                border-radius: 0.375rem;
+                transition: all 0.3s ease;
+                position: relative;
+                z-index: 60;
+            }
+            
+            @media (max-width: 768px) {
+                .mobile-menu-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+            
+            .mobile-menu-button:hover {
+                background-color: rgba(126, 86, 216, 0.05);
+            }
+            
+            .mobile-menu-icon {
+                width: 24px;
+                height: 24px;
+                position: relative;
+            }
+            
+            .mobile-menu-icon span {
+                display: block;
+                position: absolute;
+                height: 2px;
+                width: 100%;
+                background: #4B5563;
+                border-radius: 2px;
+                opacity: 1;
+                left: 0;
+                transform: rotate(0deg);
+                transition: .25s ease-in-out;
+            }
+            
+            .mobile-menu-icon span:nth-child(1) {
+                top: 5px;
+            }
+            
+            .mobile-menu-icon span:nth-child(2) {
+                top: 12px;
+            }
+            
+            .mobile-menu-icon span:nth-child(3) {
+                top: 19px;
+            }
+            
+            .mobile-menu-button.active .mobile-menu-icon span:nth-child(1) {
+                top: 12px;
+                transform: rotate(135deg);
+            }
+            
+            .mobile-menu-button.active .mobile-menu-icon span:nth-child(2) {
+                opacity: 0;
+                left: -60px;
+            }
+            
+            .mobile-menu-button.active .mobile-menu-icon span:nth-child(3) {
+                top: 12px;
+                transform: rotate(-135deg);
+            }
+            
+            /* Dropdown icon animation */
+            .rotate-180 {
+                transform: rotate(180deg);
+            }
+            
+            /* Mobile dropdown menus */
+            #mobileMapsSubMenu, #mobileUserSubMenu {
+                border-radius: 8px;
+                overflow: hidden;
+                margin-top: 4px;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+                transition: all 0.3s ease;
+            }
+            
+            #mobileMapsSubMenu a, #mobileUserSubMenu a {
+                border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            }
+            
+            #mobileMapsSubMenu a:last-child, #mobileUserSubMenu a:last-child {
+                border-bottom: none;
+            }
+            
+            /* Improved spacing for mobile nav items */
+            .nav-link {
+                margin: 8px 0;
+                padding: 12px 16px;
+            }
+            
+            /* FIX: Ensure all mobile nav items have consistent styling and spacing */
+            #mobileNavContainer .nav-link {
+                width: 100%;
+                margin: 8px 0;
+                display: flex;
+                align-items: center;
+            }
+            
+            /* FIX: Better positioning for the active indicator line on mobile */
+            #mobileNavContainer .nav-link-active::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 100%;
+                height: 3px;
+                background: var(--purple600);
+                transform: none;
+            }
+            
+            .main-content {
+                margin-top: 80px !important; /* Force this on mobile */
+            }
+            
+            /* FIX: Ensure consistent spacing between mobile menu items */
+            #mobileNavContainer > div > div > a,
+            #mobileNavContainer > div > div > div {
+                margin: 8px 0;
+            }
+            
+            /* FIX: Ensure dropdown buttons have consistent spacing */
+            #mobileMapsDropdown {
+                margin: 8px 0;
+                padding: 12px 16px;
             }
         }
     </style>
@@ -330,19 +597,12 @@
                             <img src="{{ url_for('static', filename='img/educluster-fullcolor.png') }}" alt="EDUCLUSTER" class="h-10 transition-transform hover:scale-105">
                         </a>
                     </div>
-                    
-                    <!-- Mobile Menu Button -->
-                    <button id="mobileMenuButton" class="md:hidden text-gray-600 focus:outline-none ml-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
                 </div>
                 
                 <div class="flex items-center space-x-4 md:space-x-6">
                     {% if current_user.is_authenticated %}
                     <!-- User menu when logged in -->
-                    <div class="user-container relative">
+                    <div id="userContainer" class="user-container relative">
                         <div class="flex items-center space-x-3 px-3 py-2 rounded-full cursor-pointer hover:bg-gray-100 transition-all duration-300">
                             <div class="user-avatar flex items-center justify-center">
                                 <img src="{{ url_for('static', filename='img/default.svg') }}" alt="User" class="w-full h-full object-cover">
@@ -380,21 +640,30 @@
                         </div>
                     </div>
                     {% else %}
-                    <!-- Login Button if not logged in -->
-                    <a href="/login" class="btn-masuk">Masuk</a>
+                    <!-- Login Button if not logged in - akan disembunyikan di mobile -->
+                    <a href="/login" class="btn-masuk mobile-hide-btn">Masuk</a>
                     {% endif %}
                     
-                    <!-- Toggle Button -->
+                    <!-- Toggle Button for Desktop -->
                     <button id="toggleTopbar" class="hidden md:block text-gray-600 focus:outline-none hover:text-purple-600 transition-colors p-2 rounded-full hover:bg-purple-50">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 toggle-icon icon-collapsed" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuButton" class="mobile-menu-button md:hidden">
+                        <div class="mobile-menu-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
         
-        <!-- Navigation Menu Section - Improved with less padding -->
+        <!-- Navigation Menu Section - Desktop -->
         <div id="navSection" class="nav-section nav-hidden">
             <div class="container mx-auto px-4 md:px-8">
                 <div id="navContainer" class="nav-container flex flex-wrap md:flex-nowrap md:items-center md:justify-center space-x-0 md:space-x-4 lg:space-x-6 py-1">
@@ -407,122 +676,298 @@
                     </a>
                     
                     <!-- Dropdown for Peta Klasterisasi - Check if active page contains map/ -->
-                    <div class="dropdown relative group">
-                        <button class="dropdown-toggle nav-link {% if '/map/' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/map/' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                            </svg>
-                            Peta Klaster Wilayah
-                        </button>
-                        <div class="dropdown-menu absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-10">
-                            <a href="/map/sma" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 {% if '/map/sma' in active_page %}text-purple-600 bg-purple-50{% endif %}">
-                                Peta SMA
-                            </a>
-                            <a href="/map/smk" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 {% if '/map/smk' in active_page %}text-purple-600 bg-purple-50{% endif %}">
-                                Peta SMK
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <a href="/data" class="nav-link {% if '/data' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/data' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-                        </svg>
-                        Data Wilayah
-                    </a>
-                    
-                    <a href="/clustering" class="nav-link {% if '/clustering' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/clustering' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                        Klasterisasi Wilayah
-                    </a>
-                </div>
+<div id="dropdownMaps" class="dropdown relative group">
+    <button class="dropdown-toggle nav-link {% if '/map/' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/map/' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+        </svg>
+        <span class="flex-grow text-left">Peta Klaster Wilayah</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+    </button>
+    <div class="dropdown-menu absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-10">
+        <a href="/map/sma" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 {% if '/map/sma' in active_page %}text-purple-600 bg-purple-50{% endif %}">
+            Peta SMA
+        </a>
+        <a href="/map/smk" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 {% if '/map/smk' in active_page %}text-purple-600 bg-purple-50{% endif %}">
+            Peta SMK
+        </a>
+    </div>
+</div>
+
+<a href="/data" class="nav-link {% if '/data' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/data' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+    </svg>
+    Data Wilayah
+</a>
+
+<a href="/klasterisasi" class="nav-link {% if '/clustering' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/clustering' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+    </svg>
+    Klasterisasi Wilayah
+</a>
+</div>
+</div>
+</div>
+
+<!-- Mobile Navigation Menu - Dengan tombol Masuk di atas -->
+<div id="mobileNavContainer" class="mobile-nav-container md:hidden">
+<div class="container mx-auto px-4">
+<div class="py-2">
+    {% set active_page = request.path %}
+    
+    <!-- Tambahkan tombol masuk di bagian atas menu mobile ketika tidak login -->
+    {% if not current_user.is_authenticated %}
+    <a href="/login" class="menu-btn-masuk">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+        </svg>
+        Masuk
+    </a>
+    {% endif %}
+    
+    <a href="/" class="nav-link {% if active_page == '/' %}nav-link-active{% endif %} flex items-center text-{% if active_page == '/' %}purple-600{% else %}gray-700{% endif %} transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        Beranda
+    </a>
+    
+    <!-- Mobile Dropdown for Peta Klasterisasi -->
+    <div class="w-full py-1">
+        <button id="mobileMapsDropdown" class="nav-link w-full flex items-center justify-between text-gray-700 transition-colors {% if '/map/' in active_page %}nav-link-active text-purple-600{% endif %}">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+                Peta Klaster Wilayah
             </div>
+            <svg id="mapsDropdownIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <div id="mobileMapsSubMenu" class="hidden bg-gray-50 rounded-md mt-1 overflow-hidden">
+            <a href="/map/sma" class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 {% if '/map/sma' in active_page %}text-purple-600 bg-purple-50{% endif %}">
+                Peta SMA
+            </a>
+            <a href="/map/smk" class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 {% if '/map/smk' in active_page %}text-purple-600 bg-purple-50{% endif %}">
+                Peta SMK
+            </a>
         </div>
     </div>
     
-    <!-- Main Content -->
-    <div id="mainContent" class="main-content content-collapsed">
-        {% block content %}{% endblock %}
-    </div>
+    <a href="/data" class="nav-link {% if '/data' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/data' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+        </svg>
+        Data Wilayah
+    </a>
     
-    <!-- JavaScript for Topbar Toggle with Animation -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const topbar = document.getElementById('topbar');
-            const navSection = document.getElementById('navSection');
-            const toggleBtn = document.getElementById('toggleTopbar');
-            const mobileMenuBtn = document.getElementById('mobileMenuButton');
-            const navContainer = document.getElementById('navContainer');
-            const toggleIcon = toggleBtn.querySelector('.toggle-icon');
-            const mainContent = document.getElementById('mainContent');
-            let isCollapsed = true; // Default to collapsed state
+    <a href="/clustering" class="nav-link {% if '/clustering' in active_page %}nav-link-active{% endif %} flex items-center text-{% if '/clustering' in active_page %}purple-600{% else %}gray-700{% endif %} transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        Klasterisasi Wilayah
+    </a>
+    
+    <!-- Mobile User Menu (only when logged in) -->
+    {% if current_user.is_authenticated %}
+    <div class="mt-4 pt-4 border-t border-gray-100">
+        <button id="mobileUserMenuButton" class="nav-link w-full flex items-center justify-between text-gray-700 transition-colors">
+            <div class="flex items-center">
+                <div class="user-avatar flex items-center justify-center mr-3">
+                    <img src="{{ url_for('static', filename='img/default.svg') }}" alt="User" class="w-full h-full object-cover">
+                </div>
+                <span>{{ current_user.username }}</span>
+            </div>
+            <svg id="userDropdownIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <div id="mobileUserSubMenu" class="hidden bg-gray-50 rounded-md mt-1 overflow-hidden">
+            <a href="/dashboard" class="flex items-center px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Dashboard Admin
+            </a>
+            <a href="/logout" class="flex items-center px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Keluar Akun
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+</div>
+</div>
+</div>
+
+<!-- Main Content -->
+<div id="mainContent" class="main-content content-collapsed">
+{% block content %}{% endblock %}
+</div>
+
+<!-- JavaScript for Topbar Toggle with Animation -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const topbar = document.getElementById('topbar');
+    const navSection = document.getElementById('navSection');
+    const toggleBtn = document.getElementById('toggleTopbar');
+    const mobileMenuBtn = document.getElementById('mobileMenuButton');
+    const mobileNavContainer = document.getElementById('mobileNavContainer');
+    const toggleIcon = toggleBtn ? toggleBtn.querySelector('.toggle-icon') : null;
+    const mainContent = document.getElementById('mainContent');
+    let isCollapsed = true; // Default to collapsed state
+    
+    // Function to toggle desktop navigation
+    function toggleNav() {
+        if (isCollapsed) {
+            // Expand topbar with animation
+            topbar.classList.remove('topbar-collapsed');
+            topbar.classList.add('topbar-expanded');
             
-            // Function to toggle navigation
-            function toggleNav() {
-                if (isCollapsed) {
-                    // Expand topbar with animation
-                    topbar.classList.remove('topbar-collapsed');
-                    topbar.classList.add('topbar-expanded');
-                    
-                    // Add a small delay for sequential animation
-                    setTimeout(() => {
-                        navSection.classList.remove('nav-hidden');
-                        navSection.classList.add('nav-visible');
-                    }, 100);
-                    
-                    // Adjust content
-                    mainContent.classList.remove('content-collapsed');
-                    mainContent.classList.add('content-expanded');
-                    
-                    // Rotate icon
-                    if (toggleIcon) toggleIcon.classList.remove('icon-collapsed');
-                } else {
-                    // Collapse topbar with animation
-                    navSection.classList.remove('nav-visible');
-                    navSection.classList.add('nav-hidden');
-                    
-                    // Add a small delay for sequential animation
-                    setTimeout(() => {
-                        topbar.classList.remove('topbar-expanded');
-                        topbar.classList.add('topbar-collapsed');
-                    }, 100);
-                    
-                    // Adjust content
-                    mainContent.classList.remove('content-expanded');
-                    mainContent.classList.add('content-collapsed');
-                    
-                    // Rotate icon
-                    if (toggleIcon) toggleIcon.classList.add('icon-collapsed');
+            // Add a small delay for sequential animation
+            setTimeout(() => {
+                if (navSection) {
+                    navSection.classList.remove('nav-hidden');
+                    navSection.classList.add('nav-visible');
                 }
+            }, 100);
+            
+            // Adjust content
+            mainContent.classList.remove('content-collapsed');
+            mainContent.classList.add('content-expanded');
+            
+            // Rotate icon
+            if (toggleIcon) toggleIcon.classList.remove('icon-collapsed');
+        } else {
+            // Collapse topbar with animation
+            if (navSection) {
+                navSection.classList.remove('nav-visible');
+                navSection.classList.add('nav-hidden');
+            }
+            
+            // Add a small delay for sequential animation
+            setTimeout(() => {
+                topbar.classList.remove('topbar-expanded');
+                topbar.classList.add('topbar-collapsed');
+            }, 100);
+            
+            // Adjust content
+            mainContent.classList.remove('content-expanded');
+            mainContent.classList.add('content-collapsed');
+            
+            // Rotate icon
+            if (toggleIcon) toggleIcon.classList.add('icon-collapsed');
+        }
+        
+        isCollapsed = !isCollapsed;
+    }
+    
+    // Desktop toggle button
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleNav);
+    }
+    
+    // Mobile menu toggle
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            if (mobileNavContainer) {
+                mobileNavContainer.classList.toggle('open');
                 
-                isCollapsed = !isCollapsed;
-            }
-            
-            // Desktop toggle button
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', toggleNav);
-            }
-            
-            // Mobile menu toggle
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', function() {
-                    navContainer.classList.toggle('menu-open');
-                    // Adjust for mobile view
-                    if (window.innerWidth < 768) {
-                        toggleNav();
-                    }
-                });
-            }
-            
-            // Handle window resize for responsive adjustments
-            window.addEventListener('resize', function() {
-                if (window.innerWidth >= 768 && navContainer.classList.contains('menu-open')) {
-                    navContainer.classList.remove('menu-open');
+                // Add inline styles to control height transition
+                if (mobileNavContainer.classList.contains('open')) {
+                    mobileNavContainer.style.maxHeight = mobileNavContainer.scrollHeight + 'px';
+                } else {
+                    mobileNavContainer.style.maxHeight = '0';
                 }
-            });
+            }
         });
-    </script>
+    }
+    
+    // Mobile dropdowns
+    const mobileMapsDropdown = document.getElementById('mobileMapsDropdown');
+    const mobileMapsSubMenu = document.getElementById('mobileMapsSubMenu');
+    const mapsDropdownIcon = document.getElementById('mapsDropdownIcon');
+    
+    if (mobileMapsDropdown && mobileMapsSubMenu) {
+        mobileMapsDropdown.addEventListener('click', function() {
+            mobileMapsSubMenu.classList.toggle('hidden');
+            if (mapsDropdownIcon) {
+                mapsDropdownIcon.classList.toggle('rotate-180');
+            }
+            
+            // Recalculate parent container height
+            if (mobileNavContainer && mobileNavContainer.classList.contains('open')) {
+                setTimeout(() => {
+                    mobileNavContainer.style.maxHeight = mobileNavContainer.scrollHeight + 'px';
+                }, 10);
+            }
+        });
+    }
+    
+    // Mobile user menu
+    const mobileUserMenuButton = document.getElementById('mobileUserMenuButton');
+    const mobileUserSubMenu = document.getElementById('mobileUserSubMenu');
+    const userDropdownIcon = document.getElementById('userDropdownIcon');
+    
+    if (mobileUserMenuButton && mobileUserSubMenu) {
+        mobileUserMenuButton.addEventListener('click', function() {
+            mobileUserSubMenu.classList.toggle('hidden');
+            if (userDropdownIcon) {
+                userDropdownIcon.classList.toggle('rotate-180');
+            }
+            
+            // Recalculate parent container height
+            if (mobileNavContainer && mobileNavContainer.classList.contains('open')) {
+                setTimeout(() => {
+                    mobileNavContainer.style.maxHeight = mobileNavContainer.scrollHeight + 'px';
+                }, 10);
+            }
+        });
+    }
+    
+    // Desktop user dropdown
+    const userContainer = document.getElementById('userContainer');
+    if (userContainer) {
+        userContainer.addEventListener('click', function(e) {
+            if (window.innerWidth < 768) { // Only for mobile
+                this.classList.toggle('active');
+                e.stopPropagation();
+            }
+        });
+    }
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        // For desktop, we use hover so we don't need this
+        if (window.innerWidth >= 768) return;
+        
+        // Close user dropdown when clicking outside
+        if (userContainer && !userContainer.contains(e.target)) {
+            userContainer.classList.remove('active');
+        }
+    });
+    
+    // Handle window resize for responsive adjustments
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) {
+            // Reset mobile menu when switching to desktop
+            if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+            if (mobileNavContainer) {
+                mobileNavContainer.classList.remove('open');
+                mobileNavContainer.style.maxHeight = '0';
+            }
+        }
+    });
+});
+</script>
 </body>
 </html>

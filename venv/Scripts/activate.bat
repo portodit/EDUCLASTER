@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=E:\TA (Lulus Tepat Waktu)\DASHBOARD\dashboard_cluster1_new\dashboard_cluster1_new\venv
+set VIRTUAL_ENV=E:\TA (Lulus Tepat Waktu)\DASHBOARD\dashboard_cluster1_new\educluster\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

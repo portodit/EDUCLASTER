@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // FAQ Section
-    // Script untuk FAQ accordion dengan animasi yang lebih menarik
+    // Script untuk FAQ accordion dengan animasi yang lebih menarik dan scrollable content
     const faqItems = document.querySelectorAll('.faq-item');
     
     faqItems.forEach((item, index) => {
@@ -350,6 +350,68 @@ document.addEventListener('DOMContentLoaded', function() {
                         `;
                         document.head.appendChild(rippleStyle);
                     }
+                    
+                    // Enhanced scrollable functionality
+                    const answer = item.querySelector('.faq-answer');
+                    const content = answer.querySelector('p');
+                    
+                    // Check if the content is overflowing
+                    setTimeout(() => {
+                        if (content.offsetHeight > 250) { // If content is taller than container
+                            // Add a subtle indicator that content is scrollable
+                            const scrollIndicator = document.createElement('div');
+                            scrollIndicator.classList.add('scroll-indicator');
+                            scrollIndicator.style.cssText = `
+                                position: absolute;
+                                bottom: 10px;
+                                right: 10px;
+                                width: 30px;
+                                height: 30px;
+                                background-color: rgba(139, 92, 246, 0.1);
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                pointer-events: none;
+                                opacity: 0.7;
+                                animation: pulseIndicator 2s infinite;
+                            `;
+                            
+                            // Add arrow icon
+                            scrollIndicator.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#6B46C1" viewBox="0 0 16 16">
+                                    <path d="M8 15a.5.5 0 0 1-.5-.5V2.707l-3.146 3.147a.5.5 0 0 1-.708-.708l4-4a.5.5 0 0 1 .708 0l4 4a.5.5 0 1 1-.708.708L8.5 2.707V14.5a.5.5 0 0 1-.5.5z"/>
+                                </svg>
+                            `;
+                            
+                            answer.style.position = 'relative';
+                            answer.appendChild(scrollIndicator);
+                            
+                            // Create animation for the indicator
+                            if (!document.querySelector('#pulse-indicator-keyframe')) {
+                                const indicatorStyle = document.createElement('style');
+                                indicatorStyle.id = 'pulse-indicator-keyframe';
+                                indicatorStyle.textContent = `
+                                    @keyframes pulseIndicator {
+                                        0%, 100% { transform: translateY(0); opacity: 0.7; }
+                                        50% { transform: translateY(-5px); opacity: 1; }
+                                    }
+                                `;
+                                document.head.appendChild(indicatorStyle);
+                            }
+                            
+                            // Hide indicator when scrolling
+                            answer.addEventListener('scroll', () => {
+                                scrollIndicator.style.opacity = '0';
+                                scrollIndicator.style.animation = 'none';
+                                
+                                // Remove after scrolling
+                                setTimeout(() => {
+                                    scrollIndicator.remove();
+                                }, 500);
+                            });
+                        }
+                    }, 300);
                 }, 200);
             }
         });
@@ -369,31 +431,96 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Footer
-    // Partikel untuk footer
-    const particlesContainer = document.querySelector('.particles-container');
-    if (particlesContainer) {
-        const particleCount = 20;
+    // Animated elements for footer
+    function createFooterAnimations() {
+        const footer = document.querySelector('footer');
+        if (!footer) return;
         
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('span');
-            particle.classList.add('particle');
+        // Add multiple animated bubbles to footer
+        for (let i = 0; i < 12; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('footer-bubble');
             
-            // Random position and size
-            const size = Math.random() * 4 + 2;
+            const size = Math.random() * 40 + 10;
             const posX = Math.random() * 100;
-            const delay = Math.random() * 15;
-            const duration = 10 + Math.random() * 20;
+            const posY = Math.random() * 100;
+            const delay = Math.random() * 5;
+            
+            bubble.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                left: ${posX}%;
+                top: ${posY}%;
+                animation-delay: ${delay}s;
+                animation-duration: ${15 + Math.random() * 10}s;
+            `;
+            
+            footer.appendChild(bubble);
+        }
+        
+        // Add animated light rays
+        for (let i = 0; i < 5; i++) {
+            const ray = document.createElement('div');
+            ray.classList.add('footer-light-ray');
+            
+            const posY = Math.random() * 80 + 10;
+            const width = Math.random() * 150 + 50;
+            const delay = Math.random() * 8;
+            
+            ray.style.cssText = `
+                top: ${posY}%;
+                left: 0;
+                width: ${width}px;
+                animation-delay: ${delay}s;
+                animation-duration: ${10 + Math.random() * 8}s;
+            `;
+            
+            footer.appendChild(ray);
+        }
+        
+        // Add animated waves
+        for (let i = 0; i < 3; i++) {
+            const wave = document.createElement('div');
+            wave.classList.add('footer-wave');
+            
+            // Create SVG wave pattern
+            wave.style.cssText = `
+                bottom: ${i * 10}px;
+                opacity: ${0.1 - i * 0.02};
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' opacity='.25' fill='%23FFFFFF'/%3E%3C/svg%3E");
+                background-size: 100% 100%;
+                height: ${15 + i * 5}px;
+                animation-delay: ${i * 2}s;
+            `;
+            
+            footer.appendChild(wave);
+        }
+        
+        // Add floating particles
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('span');
+            particle.classList.add('footer-particle');
+            
+            const size = Math.random() * 3 + 1;
+            const posX = Math.random() * 100;
+            const delay = Math.random() * 5;
+            const duration = 10 + Math.random() * 15;
+            const xEnd = (Math.random() - 0.5) * 200; // Random end position on X
             
             particle.style.cssText = `
                 left: ${posX}%;
                 width: ${size}px;
                 height: ${size}px;
+                bottom: -5%;
+                opacity: 0;
+                --x-end: ${xEnd}px;
                 animation-delay: ${delay}s;
                 animation-duration: ${duration}s;
-                bottom: -10%;
             `;
             
-            particlesContainer.appendChild(particle);
+            footer.appendChild(particle);
         }
     }
+    
+    createFooterAnimations();
 });

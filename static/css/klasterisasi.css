@@ -1,0 +1,3485 @@
+/* klasterisasi.css - Complete Dashboard Styling - Optimized Version */
+
+/* =============================================
+   BASE ANIMATION KEYFRAMES
+   ============================================= */
+   @keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Apply animations */
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-float {
+    animation: float 5s ease-in-out infinite;
+}
+
+/* =============================================
+   GLOBAL STYLES & RESET
+   ============================================= */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #334155;
+    min-height: 100vh;
+}
+
+/* =============================================
+   LAYOUT CONTAINER - FIXED WITH 100% HEIGHT
+   ============================================= */
+.flex.min-h-screen {
+    min-height: 100vh !important;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    position: relative;
+}
+
+/* =============================================
+   SIDEBAR IMPROVEMENTS - CRITICAL FIX FOR HEIGHT
+   ============================================= */
+
+/* CRITICAL: Fix for sidebar height */
+#sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    top: 60px !important;
+    bottom: 0 !important; /* Ini penting untuk memastikan sidebar mencapai bawah */
+    height: auto !important; /* Menggunakan auto daripada calc untuk fleksibilitas */
+    min-height: calc(100vh - 60px) !important;
+    width: 16rem !important;
+    z-index: 30 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Pastikan juga main-content memiliki tinggi yang benar */
+#main-content {
+    min-height: calc(100vh - 60px) !important;
+}
+
+/* Hide scrollbar for better aesthetics */
+#sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background: #c4b5fd;
+    border-radius: 5px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+    background: #a78bfa;
+}
+
+/* Sidebar header styling */
+#sidebar .sticky.top-0 {
+    background-color: white;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Better transitioning for sidebar states */
+#sidebar.collapsed {
+    width: 5rem !important; /* Increased from 60px to ensure icons are visible */
+}
+
+#main-content {
+    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out !important;
+    margin-left: 16rem !important;
+    width: calc(100% - 16rem) !important;
+    min-height: calc(100vh - 60px) !important;
+    flex: 1;
+    position: relative;
+}
+
+#main-content.expanded {
+    margin-left: 5rem !important; /* Match the collapsed sidebar width */
+    width: calc(100% - 5rem) !important;
+}
+
+/* Improved text visibility transition */
+.sidebar-text {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    white-space: nowrap;
+}
+
+#sidebar.collapsed .sidebar-text {
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+}
+
+/* Enhanced icon appearance in collapsed state - FIX VISIBILITY ISSUE */
+#sidebar.collapsed svg {
+    color: #7c3aed !important; 
+    margin: 0 auto !important;
+    display: block !important; /* Ensure icon is always visible */
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+}
+
+/* Fix collapse/expand icons visibility */
+#collapse-icon, #expand-icon {
+    color: #7c3aed !important;
+    transition: all 0.2s ease;
+    display: block !important; /* Ensure icons are always visible */
+}
+
+#sidebar.collapsed #collapse-icon {
+    display: none !important;
+}
+
+#sidebar:not(.collapsed) #expand-icon {
+    display: none !important;
+}
+
+#sidebar.collapsed #expand-icon {
+    display: block !important;
+}
+
+/* Enhanced sidebar menu items with better active state */
+#sidebar .tab-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #4b5563;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Active tab styling with special visual effects */
+#sidebar .tab-btn.active, 
+#sidebar .tab-btn.active-tab {
+    background-color: rgba(124, 58, 237, 0.1) !important;
+    color: #7c3aed !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 5px rgba(124, 58, 237, 0.2) !important;
+}
+
+#sidebar .tab-btn.active svg, 
+#sidebar .tab-btn.active-tab svg {
+    color: #7c3aed !important;
+}
+
+#sidebar .tab-btn.active::before,
+#sidebar .tab-btn.active-tab::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #7c3aed;
+    border-radius: 0 2px 2px 0;
+}
+
+#sidebar .tab-btn:hover:not(.active):not(.active-tab) {
+    background-color: #f9fafb;
+    color: #6b46c1;
+}
+
+#sidebar.collapsed .tab-btn {
+    justify-content: center;
+    padding: 0.75rem 0;
+}
+
+#sidebar.collapsed .tab-btn svg {
+    margin-right: 0;
+}
+
+/* =============================================
+   MAIN CONTENT ADJUSTMENTS
+   ============================================= */
+
+#main-content > section.w-full.py-10.bg-gradient-to-r.from-purple-700.via-purple-600.to-purple-800 {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Enhanced grid lines background */
+.grid-lines {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: center;
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+}
+
+/* Header decorative elements enhancement */
+.absolute.top-0.right-0.w-64.h-64,
+.absolute.bottom-0.left-0.w-64.h-64 {
+    opacity: 0.25 !important;
+    background: radial-gradient(circle, rgba(192, 132, 252, 0.8) 0%, rgba(107, 33, 168, 0.4) 100%) !important;
+    border-radius: 50% !important;
+    filter: blur(30px) !important;
+    transition: all 0.5s ease !important;
+}
+
+.absolute.top-0.right-0.w-64.h-64:hover,
+.absolute.bottom-0.left-0.w-64.h-64:hover {
+    transform: scale(1.1) !important;
+    opacity: 0.3 !important;
+}
+
+/* =============================================
+   TAB CONTENT DISPLAY
+   ============================================= */
+
+/* Tab Content Styles */
+.tab-pane {
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+.tab-pane.active {
+    display: block !important;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Specific fix for Pane visibility in context of sidebar */
+.tab-content {
+    width: 100%;
+    position: relative;
+}
+
+/* =============================================
+   CARD STYLING IMPROVEMENTS - MODERN AND EYE-CATCHING 
+   ============================================= */
+
+/* Enhanced cluster card styling - COMPLETELY REDESIGNED */
+.cluster-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 1rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05), 0 1px 5px rgba(0, 0, 0, 0.02);
+    background: linear-gradient(to bottom, #ffffff, #f9fafb);
+    border: 1px solid rgba(124, 58, 237, 0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.cluster-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(124, 58, 237, 0.1), 0 5px 15px rgba(124, 58, 237, 0.05);
+    border-color: rgba(124, 58, 237, 0.2);
+}
+
+/* Glass-like header with gradient */
+.cluster-card-header {
+    position: relative;
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid #f0f0f0;
+    background: linear-gradient(120deg, #f5f3ff, #ede9fe);
+    overflow: hidden;
+}
+
+/* Dynamic header background for different quality levels */
+.cluster-card-header.tinggi, 
+.cluster-card-header.sangat-tinggi {
+    background: linear-gradient(120deg, #ecfdf5, #d1fae5);
+}
+
+.cluster-card-header.sedang {
+    background: linear-gradient(120deg, #fef3c7, #fde68a);
+}
+
+.cluster-card-header.rendah,
+.cluster-card-header.sangat-rendah {
+    background: linear-gradient(120deg, #fee2e2, #fecaca);
+}
+
+/* Animated shine effect on hover */
+.cluster-card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    transition: left 0.7s ease;
+}
+
+.cluster-card:hover .cluster-card-header::before {
+    left: 100%;
+}
+
+.cluster-card-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #1f2937;
+    font-weight: 700;
+    padding-right: 80px; /* Space for quality indicator */
+    position: relative;
+    z-index: 2;
+}
+
+/* Quality indicator badge */
+.quality-indicator {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    z-index: 2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.quality-indicator.tinggi, 
+.quality-indicator.sangat-tinggi {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #a7f3d0;
+}
+
+.quality-indicator.sedang {
+    background-color: #fef9c3;
+    color: #854d0e;
+    border: 1px solid #fde68a;
+}
+
+.quality-indicator.rendah, 
+.quality-indicator.sangat-rendah {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* Card body with better information hierarchy */
+.cluster-card-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Stats grid - 3D tiles */
+.cluster-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.stat-item {
+    background-color: #f9fafb;
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    border: 1px solid #f1f5f9;
+    transform: translateZ(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    background-color: #f8fafc;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    position: relative;
+}
+
+/* Medoid section */
+.medoid-section {
+    background-color: #f8fafc;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid #a78bfa;
+}
+
+.medoid-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.medoid-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Improved feature lists with visual distinction */
+.features-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.feature-list {
+    border-left: 4px solid;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+}
+
+.feature-list:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.feature-list.strengths {
+    border-color: #10b981;
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.feature-list.weaknesses {
+    border-color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.05);
+}
+
+.feature-list h4 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #374151;
+    margin: 0 0 0.75rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.feature-list.strengths h4::before {
+    content: "✓";
+    display: inline-block;
+    margin-right: 0.5rem;
+    color: #10b981;
+    font-weight: bold;
+}
+
+.feature-list.weaknesses h4::before {
+    content: "⚠";
+    display: inline-block;
+    margin-right: 0.5rem;
+    color: #ef4444;
+    font-weight: bold;
+}
+
+.feature-item {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #4b5563;
+}
+
+.feature-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+}
+
+.feature-item.strength::before {
+    background-color: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.feature-item.weakness::before {
+    background-color: #ef4444;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+/* Card footer for recommendations */
+.cluster-card-footer {
+    padding: 1.25rem;
+    border-top: 1px solid #f0f0f0;
+    background-color: #f8fafc;
+    border-radius: 0 0 1rem 1rem;
+}
+
+.recommendation-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #374151;
+    display: flex;
+    align-items: center;
+}
+
+.recommendation-title::before {
+    content: "💡";
+    margin-right: 0.5rem;
+}
+
+.recommendation-text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #4b5563;
+}
+
+/* =============================================
+   TABLE STYLING IMPROVEMENTS
+   ============================================= */
+
+/* Table with alternating rows and better interaction */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+thead {
+    background-color: #f8fafc;
+}
+
+th {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: #475569;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.875rem;
+    color: #334155;
+    transition: background-color 0.15s ease;
+}
+
+tbody tr {
+    transition: all 0.15s ease;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+tbody tr:hover {
+    background-color: #f1f5f9;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    z-index: 1;
+    position: relative;
+}
+
+/* =============================================
+   RADIAL PROGRESS BARS
+   ============================================= */
+
+.radial-progress {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+}
+
+.radial-progress-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #e2e8f0;
+}
+
+.radial-progress-fill {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    clip: rect(0px, 60px, 60px, 30px);
+    background: #7c3aed;
+    transform: rotate(0deg);
+    transition: transform 1s ease;
+}
+
+.radial-progress-text {
+    position: relative;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* =============================================
+   EVALUASI STANDAR IMPROVEMENTS
+   ============================================= */
+
+/* Ensure charts have proper height */
+#evaluasi-compliance-chart,
+#evaluasi-pie-chart {
+    width: 100%;
+    height: 300px !important;
+    min-height: 300px;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    padding: 1rem;
+    border: 1px solid #f1f5f9;
+}
+
+/* Better table styling for evaluation details */
+#evaluasi-table-body tr td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.875rem;
+}
+
+/* Status indicators for evaluation */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.status-badge.ideal {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #a7f3d0;
+}
+
+.status-badge.not-ideal {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* Enhanced recommendation cards for priorities */
+.priority-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+    transition: all 0.2s ease;
+}
+
+.priority-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.priority-card.high {
+    border-color: #ef4444;
+}
+
+.priority-card.medium {
+    border-color: #f59e0b;
+}
+
+.priority-card.low {
+    border-color: #3b82f6;
+}
+
+/* =============================================
+   DATA STATE CONTAINERS - FIX EMPTY STATE DISPLAY
+   ============================================= */
+
+/* This ensures empty states are properly hidden when data is present */
+.data-container .empty-state {
+    display: none !important;
+}
+
+.data-container.is-empty .empty-state {
+    display: block !important;
+}
+
+.data-container.is-empty .data-content {
+    display: none !important;
+}
+
+.data-container .loading-state {
+    display: none;
+}
+
+.data-container.is-loading .loading-state {
+    display: flex;
+}
+
+.data-container.is-loading .data-content,
+.data-container.is-loading .empty-state {
+    display: none !important;
+}
+
+/* Specific fixes for problematic containers */
+#wilayah-table-view.hidden + #wilayah-empty-state,
+#sekolah-table-view.hidden + #sekolah-empty-state,
+#klaster-table-view.hidden + #klaster-empty-state,
+#karakteristik-table-view.hidden + #karakteristik-empty-state,
+#evaluasi-table-view.hidden + #evaluasi-empty-state {
+    display: block !important;
+}
+
+#wilayah-table-view:not(.hidden) + #wilayah-empty-state,
+#sekolah-table-view:not(.hidden) + #sekolah-empty-state,
+#klaster-table-view:not(.hidden) + #klaster-empty-state,
+#karakteristik-table-view:not(.hidden) + #karakteristik-empty-state,
+#evaluasi-table-view:not(.hidden) + #evaluasi-empty-state {
+    display: none !important;
+}
+
+/* Empty state styling enhancement */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background-color: #f9fafb;
+    border-radius: 0.75rem;
+    border: 1px dashed #e5e7eb;
+    text-align: center;
+}
+
+.empty-state svg {
+    width: 4rem;
+    height: 4rem;
+    color: #9ca3af;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #6b7280;
+    max-width: 24rem;
+    margin: 0 auto 1.5rem;
+}
+
+.empty-state .btn {
+    background-color: #7c3aed;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.empty-state .btn:hover {
+    background-color: #6d28d9;
+}
+
+/* =============================================
+   PAGINATION IMPROVEMENTS
+   ============================================= */
+
+/* Enhanced pagination styling and interactions */
+#wilayah-pagination,
+#sekolah-pagination,
+#klaster-pagination,
+#karakteristik-pagination,
+#evaluasi-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.pagination-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background-color: #f1f5f9;
+    color: #475569;
+    font-size: 0.875rem;
+    margin: 0 0.25rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.pagination-button:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+    border-color: #cbd5e1;
+}
+
+.pagination-button.active {
+    background-color: #7c3aed;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(124, 58, 237, 0.3);
+}
+
+.pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =============================================
+   MODAL STYLING
+   ============================================= */
+
+.fixed.inset-0.bg-gray-900.bg-opacity-50 {
+    backdrop-filter: blur(4px);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fixed.inset-0.bg-gray-900.bg-opacity-50 .bg-white {
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-out;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.modal-title {
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.modal-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+/* Modal loader animation */
+.modal-loading .loader {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(124, 58, 237, 0.3);
+    border-radius: 50%;
+    border-top-color: #7c3aed;
+    animation: spin 1s linear infinite;
+}
+
+/* =============================================
+   FORM INPUTS ENHANCEMENT
+   ============================================= */
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    border-radius: 0.5rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid #cbd5e1;
+    background: white;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    width: 100%;
+    color: #1e293b;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+}
+
+label {
+    color: #475569;
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Form group spacing */
+.mb-4, .form-group {
+    margin-bottom: 1.25rem;
+}
+
+/* =============================================
+   FILE UPLOAD STYLING
+   ============================================= */
+
+.file-upload-container {
+    border: 2px dashed #d8b4fe;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: #f5f3ff;
+    cursor: pointer;
+}
+
+.file-upload-container:hover {
+    border-color: #a78bfa;
+    background-color: #ede9fe;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(167, 139, 250, 0.2);
+}
+
+.file-upload-container.drag-over {
+    border-color: #7c3aed;
+    background-color: #ede9fe;
+    transform: scale(1.02);
+}
+
+.file-upload-container svg {
+    transition: transform 0.3s ease;
+}
+
+.file-upload-container:hover svg {
+    transform: scale(1.1);
+}
+
+/* =============================================
+   BUTTONS AND LINKS
+   ============================================= */
+
+button, .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+button::after, .btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+button:hover::after, .btn:hover::after {
+    left: 100%;
+}
+
+.btn-primary, button[type="submit"] {
+    background: linear-gradient(45deg, #8b5cf6, #7c3aed);
+    color: white;
+    box-shadow: 0 2px 5px rgba(124, 58, 237, 0.3);
+}
+
+.btn-primary:hover, button[type="submit"]:hover {
+    background: linear-gradient(45deg, #7c3aed, #6d28d9);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
+}
+
+.btn-secondary {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.btn-danger {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.btn-danger:hover {
+    background-color: #fecaca;
+    color: #991b1b;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(239, 68, 68, 0.2);
+}
+
+/* Links styling */
+a {
+    color: #7c3aed;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: #6d28d9;
+    text-decoration: underline;
+}
+
+/* Action links */
+.text-indigo-600 {
+    color: #4f46e5;
+}
+
+.text-indigo-600:hover {
+    color: #4338ca;
+}
+
+.text-green-600 {
+    color: #16a34a;
+}
+
+.text-green-600:hover {
+    color: #15803d;
+}
+
+.text-red-600 {
+    color: #dc2626;
+}
+
+.text-red-600:hover {
+    color: #b91c1c;
+}
+
+/* =============================================
+   ALERTS AND NOTIFICATIONS
+   ============================================= */
+
+.alert {
+    position: relative;
+    padding: 1rem 3rem 1rem 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    animation: fadeIn 0.3s ease-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.alert-success {
+    background-color: #d1fae5;
+    border-color: #a7f3d0;
+    color: #065f46;
+}
+
+.alert-danger {
+    background-color: #fee2e2;
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+.alert-info {
+    background-color: #dbeafe;
+    border-color: #bfdbfe;
+    color: #1e40af;
+}
+
+.alert-warning {
+    background-color: #fef3c7;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+/* Close button for alerts */
+.alert-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0.75rem;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+/* =============================================
+   LOADING INDICATORS
+   ============================================= */
+
+.loading-spinner {
+    border: 3px solid rgba(124, 58, 237, 0.1);
+    border-radius: 50%;
+    border-top: 3px solid #7c3aed;
+    width: 1.25rem;
+    height: 1.25rem;
+    animation: spin 1s linear infinite;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+/* =============================================
+   TOOLTIP ENHANCEMENTS
+   ============================================= */
+
+.tooltip {
+    position: relative;
+    cursor: help;
+    display: inline-block;
+}
+
+.tooltip::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1f2937;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 20;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    width: max-content;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    pointer-events: none;
+}
+
+.tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: #1f2937 transparent transparent transparent;
+    z-index: 20;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    pointer-events: none;
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =============================================
+   CHARACTERISTIC CARD IMPROVEMENTS
+   ============================================= */
+
+.characteristic-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #f1f5f9;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.characteristic-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.characteristic-card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    background: linear-gradient(to right, #f5f3ff, #ede9fe);
+}
+
+.characteristic-card-header.tinggi, 
+.characteristic-card-header.sangat-tinggi {
+    background: linear-gradient(to right, #ecfdf5, #d1fae5);
+}
+
+.characteristic-card-header.sedang {
+    background: linear-gradient(to right, #fef3c7, #fde68a);
+}
+
+.characteristic-card-header.rendah,
+.characteristic-card-header.sangat-rendah {
+    background: linear-gradient(to right, #fee2e2, #fecaca);
+}
+
+.characteristic-card-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.characteristic-card-body {
+    padding: 1.5rem;
+    flex: 1;
+}
+
+.characteristic-indicator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background: #f9fafb;
+    margin-bottom: 0.75rem;
+}
+
+.characteristic-indicator:hover {
+    background: #f3f4f6;
+}
+
+.characteristic-indicator .name {
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.characteristic-indicator .value {
+    font-weight: 600;
+    color: #1f2937;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.characteristic-indicator.ideal .value {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.characteristic-indicator.not-ideal .value {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* =============================================
+   HIERARCHICAL NAVIGATION
+   ============================================= */
+
+.hierarchy-nav {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+}
+
+.hierarchy-nav-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    white-space: nowrap;
+}
+
+.hierarchy-nav-item:hover {
+    background: #f1f5f9;
+}
+
+.hierarchy-nav-item.active {
+    background: #ede9fe;
+    color: #7c3aed;
+    font-weight: 500;
+}
+
+.hierarchy-nav-separator {
+    margin: 0 0.5rem;
+    color: #94a3b8;
+}
+
+/* =============================================
+   VIEW TOGGLE
+   ============================================= */
+
+.view-toggle {
+    display: flex;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.view-toggle-btn {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    color: #64748b;
+    cursor: pointer;
+    flex: 1;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.view-toggle-btn.active {
+    background: #7c3aed;
+    color: white;
+}
+
+.view-toggle-btn:hover:not(.active) {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.view-toggle-btn svg {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+}
+
+/* =============================================
+   ACCORDIONS FOR PRIORITIES
+   ============================================= */
+
+.accordion {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.accordion-header {
+    padding: 1rem;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.accordion-header:hover {
+    background: #f3f4f6;
+}
+
+.accordion-body {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.accordion.open .accordion-body {
+    padding: 1rem;
+    max-height: 500px;
+}
+
+.accordion-icon {
+    transition: transform 0.3s ease;
+}
+
+.accordion.open .accordion-icon {
+    transform: rotate(180deg);
+}
+
+/* =============================================
+   BREADCRUMB ENHANCEMENT
+   ============================================= */
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 0.875rem;
+}
+
+.breadcrumb-item a {
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    color: #7c3aed;
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: #334155;
+    font-weight: 500;
+}
+
+.breadcrumb-separator {
+    margin: 0 0.5rem;
+    color: #cbd5e1;
+}
+
+/* =============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================= */
+
+@media (max-width: 768px) {
+    #sidebar {
+        width: 4rem !important;
+    }
+    
+    #sidebar.collapsed {
+        width: 0 !important;
+        transform: translateX(-100%);
+    }
+    
+    #main-content {
+        margin-left: 4rem !important;
+        width: calc(100% - 4rem) !important;
+    }
+    
+    #main-content.expanded {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    
+    .cluster-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .features-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .grid-cols-1.md\\:grid-cols-2,
+    .grid-cols-1.md\\:grid-cols-3,
+    .grid-cols-1.md\\:grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .fixed.inset-0.bg-gray-900.bg-opacity-50 .bg-white {
+        width: 95vw;
+        max-height: 80vh;
+    }
+    
+    .hierarchy-nav {
+        padding: 0.5rem;
+    }
+    
+    .hierarchy-nav-item {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* =============================================
+   SPECIFIC FIXES FOR IDENTIFIED ISSUES
+   ============================================= */
+
+/* Fix for header section gradient */
+section.w-full.py-10.bg-gradient-to-r.from-purple-700.via-purple-600.to-purple-800 {
+    background: linear-gradient(45deg, #7e22ce, #9333ea, #7c3aed, #6d28d9);
+    background-size: 300% 300%;
+    animation: gradientShift 10s ease infinite;
+}
+
+/* Fix for cards in Data Klaster view */
+#klaster-cards, 
+#karakteristik-cards,
+#results-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+/* Critical Display Fix: Empty State Containers */
+#wilayah-empty-state, 
+#sekolah-empty-state, 
+#klaster-empty-state,
+#karakteristik-empty-state,
+#evaluasi-empty-state,
+#results-empty-state {
+    display: none !important;
+}
+
+#wilayah-empty-state.active,
+#sekolah-empty-state.active,
+#klaster-empty-state.active,
+#karakteristik-empty-state.active,
+#evaluasi-empty-state.active,
+#results-empty-state.active {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background-color: #f9fafb;
+    border-radius: 0.75rem;
+    border: 1px dashed #e5e7eb;
+    text-align: center;
+}
+
+/* Fix for table showing when it should be hidden */
+#wilayah-table-view.hidden,
+#sekolah-table-view.hidden,
+#klaster-table-view.hidden,
+#karakteristik-table-view.hidden,
+#evaluasi-table-view.hidden,
+#karakteristik-card-view.hidden {
+    display: none !important;
+}
+
+/* Fix for Export Dropdown */
+.export-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 0.5rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    z-index: 40;
+    width: auto;
+    min-width: 10rem;
+    opacity: 0;
+    transform: scale(0.95);
+    transform-origin: top right;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.export-menu.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+.export-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #475569;
+    font-size: 0.875rem;
+    transition: all 0.15s ease;
+    border-radius: 0.25rem;
+    margin: 0.25rem;
+}
+
+.export-menu a:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    text-decoration: none;
+}
+
+/* Fix for footer links */
+footer a {
+    color: #7c3aed;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+footer a:hover {
+    color: #6d28d9;
+    text-decoration: underline;
+}
+
+/* Ensure active tab has the right styling */
+.tab-btn.active,
+.tab-btn.active-tab {
+    color: #7c3aed !important;
+    font-weight: 600 !important;
+    background-color: rgba(124, 58, 237, 0.1) !important;
+}
+
+/* Fix for cluster cards table data */
+.cluster-card table {
+    margin-bottom: 0;
+    font-size: 0.8rem;
+}
+
+.cluster-card table th,
+.cluster-card table td {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+/* Fix for radar chart container */
+#radar-chart-container {
+    height: 400px !important;
+    margin-top: 1.5rem !important;
+}
+
+/* Fix tooltip overflow */
+.tooltip {
+    overflow: visible !important;
+}
+
+/* =============================================
+   VISUAL HIERARCHY IMPROVEMENTS
+   ============================================= */
+
+/* Level indicators for hierarchy */
+.level-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    margin-right: 0.5rem;
+}
+
+.level-indicator.level-cluster {
+    background-color: #ede9fe;
+    color: #7c3aed;
+}
+
+.level-indicator.level-kecamatan {
+    background-color: #e0f2fe;
+    color: #0284c7;
+}
+
+.level-indicator.level-sekolah {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+/* Relationship indicators */
+.relationship-line {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.relationship-line::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: #e5e7eb;
+}
+
+.relationship-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0.75rem;
+    height: 2px;
+    background-color: #e5e7eb;
+}
+
+.relationship-line:last-child::before {
+    height: 50%;
+}
+
+/* Navigation cards for hierarchical navigation */
+.hierarchy-nav-card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.hierarchy-nav-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1;
+}
+
+.hierarchy-nav-card .title {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.hierarchy-nav-card .title svg {
+    margin-right: 0.5rem;
+    color: #7c3aed;
+}
+
+.hierarchy-nav-card .description {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+/* Filter tag styling */
+.filter-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f3f4f6;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    color: #4b5563;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.filter-tag svg {
+    margin-left: 0.25rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    cursor: pointer;
+}
+
+.filter-tag svg:hover {
+    color: #ef4444;
+}
+
+/* Active filter indicator */
+.active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+}
+
+.active-filters-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Context boxes */
+.context-box {
+    padding: 1rem;
+    background-color: #f0f9ff;
+    border-left: 4px solid #0ea5e9;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.context-box .title {
+    font-weight: 600;
+    color: #0369a1;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.context-box .title svg {
+    margin-right: 0.5rem;
+}
+
+.context-box .content {
+    font-size: 0.875rem;
+    color: #1e40af;
+}
+
+/* Data visualizations */
+.visualization-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.visualization-card .header {
+    padding: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.visualization-card .title {
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    align-items: center;
+}
+
+.visualization-card .title svg {
+    margin-right: 0.5rem;
+    color: #7c3aed;
+}
+
+.visualization-card .body {
+    padding: 1rem;
+}
+
+.visualization-card .footer {
+    padding: 0.75rem 1rem;
+    background-color: #f9fafb;
+    font-size: 0.75rem;
+    color: #64748b;
+    text-align: center;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* =============================================
+   TAB NAVIGATION CONSISTENCY
+   ============================================= */
+
+/* Primary tabs - for main sections */
+.primary-tabs {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.primary-tabs::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.primary-tab {
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+}
+
+.primary-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.2s;
+}
+
+.primary-tab:hover {
+    color: #334155;
+}
+
+.primary-tab.active {
+    color: #7c3aed;
+    font-weight: 600;
+}
+
+.primary-tab.active::after {
+    background-color: #7c3aed;
+}
+
+/* Secondary tabs - for subsections */
+.secondary-tabs {
+    display: flex;
+    background-color: #f8fafc;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.secondary-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.secondary-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.secondary-tab:hover {
+    color: #334155;
+}
+
+.secondary-tab.active {
+    background-color: #ede9fe;
+    color: #7c3aed;
+    border-radius: 0.375rem;
+}
+
+/* =============================================
+   CONTEXTUAL INFORMATION FOR INDICATORS
+   ============================================= */
+
+   .indicator-info {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    background-color: #f8fafc;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.indicator-info-icon {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: #ede9fe;
+    color: #7c3aed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.indicator-info-content {
+    flex: 1;
+}
+
+.indicator-info-title {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.25rem;
+}
+
+.indicator-info-description {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.indicator-info-standard {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1e40af;
+    padding: 0.25rem 0.5rem;
+    background-color: #dbeafe;
+    border-radius: 0.25rem;
+    display: inline-block;
+}
+
+/* Indicator cards for dashboard */
+.indicator-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.indicator-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.indicator-card-header {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.indicator-card-title {
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.indicator-card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.indicator-card-status {
+    font-size: 0.75rem;
+    border-radius: 9999px;
+    padding: 0.125rem 0.5rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.indicator-card-status.ideal {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.indicator-card-status.not-ideal {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.indicator-card-status svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.25rem;
+}
+
+.indicator-card-context {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* =============================================
+   COMPARISON VIEWS (SEKOLAH VS KECAMATAN VS KLASTER)
+   ============================================= */
+
+.comparison-table {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.comparison-table thead th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #f8fafc;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.comparison-table tbody td {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+
+.comparison-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table .indicator-name {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.comparison-table .value {
+    font-weight: 600;
+    text-align: center;
+}
+
+.comparison-table .value.sekolah {
+    color: #16a34a;
+}
+
+.comparison-table .value.kecamatan {
+    color: #0284c7;
+}
+
+.comparison-table .value.klaster {
+    color: #7c3aed;
+}
+
+.comparison-table .comparison-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comparison-table .comparison-indicator svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.comparison-table .comparison-indicator.better svg {
+    color: #16a34a;
+}
+
+.comparison-table .comparison-indicator.worse svg {
+    color: #dc2626;
+}
+
+.comparison-table .comparison-indicator.same svg {
+    color: #f59e0b;
+}
+
+/* Comparison bar charts */
+.comparison-bar {
+    height: 0.75rem;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 0.25rem;
+}
+
+.comparison-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.5s ease;
+}
+
+.comparison-bar-fill.sekolah {
+    background-color: #16a34a;
+}
+
+.comparison-bar-fill.kecamatan {
+    background-color: #0284c7;
+}
+
+.comparison-bar-fill.klaster {
+    background-color: #7c3aed;
+}
+
+.comparison-bar-label {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.675rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+/* =============================================
+   RECOMMENDATION IMPROVEMENTS
+   ============================================= */
+
+/* Enhanced recommendation cards with context */
+.recommendation-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-left: 4px solid;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.recommendation-card.high-priority {
+    border-color: #ef4444;
+}
+
+.recommendation-card.medium-priority {
+    border-color: #f59e0b;
+}
+
+.recommendation-card.low-priority {
+    border-color: #3b82f6;
+}
+
+.recommendation-card-header {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.recommendation-priority {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.recommendation-priority.high {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.recommendation-priority.medium {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.recommendation-priority.low {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.recommendation-priority svg {
+    margin-right: 0.25rem;
+}
+
+.recommendation-indicator {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 1.125rem;
+}
+
+.recommendation-current-value {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.recommendation-current-value span {
+    font-weight: 600;
+    color: #ef4444;
+}
+
+.recommendation-target-value {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.recommendation-target-value span {
+    font-weight: 600;
+    color: #16a34a;
+}
+
+.recommendation-progress {
+    height: 0.5rem;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.recommendation-progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, #ef4444, #f59e0b, #16a34a);
+    border-radius: 9999px;
+    position: relative;
+}
+
+.recommendation-progress-marker {
+    position: absolute;
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: white;
+    border: 2px solid #1f2937;
+    border-radius: 9999px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.recommendation-text {
+    font-size: 0.875rem;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.recommendation-context {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* =============================================
+   ACTION BUTTONS ENHANCEMENTS
+   ============================================= */
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.action-btn svg {
+    margin-right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.action-btn.primary {
+    background-color: #7c3aed;
+    color: white;
+}
+
+.action-btn.primary:hover {
+    background-color: #6d28d9;
+}
+
+.action-btn.secondary {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.action-btn.secondary:hover {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+
+.action-btn.danger {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.action-btn.danger:hover {
+    background-color: #fecaca;
+    color: #991b1b;
+}
+
+.action-btn.success {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.action-btn.success:hover {
+    background-color: #bbf7d0;
+    color: #15803d;
+}
+
+/* =============================================
+   VISUAL EXPLANATIONS
+   ============================================= */
+
+.explanation-box {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background-color: #f8fafc;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.explanation-title {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.explanation-title svg {
+    margin-right: 0.5rem;
+    color: #7c3aed;
+}
+
+.explanation-content {
+    font-size: 0.875rem;
+    color: #334155;
+    line-height: 1.5;
+}
+
+.explanation-step {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.explanation-step:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.explanation-step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #7c3aed;
+    color: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.explanation-step-content {
+    flex: 1;
+}
+
+.explanation-step-title {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+}
+
+.explanation-step-description {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+/* Dotted connection between steps */
+.explanation-step::after {
+    content: '';
+    position: absolute;
+    top: 1.5rem;
+    left: 0.75rem;
+    width: 1px;
+    height: calc(100% - 1.5rem);
+    border-left: 2px dotted #e2e8f0;
+    z-index: 1;
+}
+
+.explanation-step:last-child::after {
+    display: none;
+}
+
+/* =============================================
+   MODAL CONTENT IMPROVEMENTS
+   ============================================= */
+
+/* Modal tabs for organized content */
+.modal-tabs {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 1.5rem;
+    background-color: #f9fafb;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.modal-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.modal-tab {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+}
+
+.modal-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.2s;
+}
+
+.modal-tab:hover {
+    color: #334155;
+}
+
+.modal-tab.active {
+    color: #7c3aed;
+    font-weight: 600;
+}
+
+.modal-tab.active::after {
+    background-color: #7c3aed;
+}
+
+.modal-tab-content {
+    display: none;
+}
+
+.modal-tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Modal section styling */
+.modal-section {
+    margin-bottom: 1.5rem;
+}
+
+.modal-section-title {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.modal-section-title svg {
+    margin-right: 0.5rem;
+    color: #7c3aed;
+}
+
+.modal-data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.modal-data-item {
+    background-color: #f9fafb;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.modal-data-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+}
+
+.modal-data-value {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* =============================================
+   ADVANCED DATA DETAILS
+   ============================================= */
+
+/* Data groups for organizing complex information */
+.data-group {
+    margin-bottom: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.data-group-header {
+    padding: 0.75rem 1rem;
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.data-group-header svg {
+    margin-right: 0.5rem;
+    color: #7c3aed;
+}
+
+.data-group-body {
+    padding: 1rem;
+}
+
+.data-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.data-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.data-item-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+}
+
+.data-item-value {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Advanced data visualization containers */
+.visualization-container {
+    height: 300px;
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.visualization-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.visualization-loading .spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid rgba(124, 58, 237, 0.1);
+    border-radius: 50%;
+    border-top: 3px solid #7c3aed;
+    animation: spin 1s linear infinite;
+    margin-bottom: 0.5rem;
+}
+
+.visualization-loading .text {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.visualization-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.visualization-placeholder svg {
+    width: 3rem;
+    height: 3rem;
+    color: #cbd5e1;
+    margin-bottom: 1rem;
+}
+
+.visualization-placeholder .title {
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.visualization-placeholder .description {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    max-width: 24rem;
+}
+
+/* =============================================
+   RESPONSIVE DESIGN ENHANCEMENTS
+   ============================================= */
+
+/* Better responsive container for narrow screens */
+.responsive-container {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.responsive-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.responsive-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.responsive-container::-webkit-scrollbar-thumb {
+    background: #c4b5fd;
+    border-radius: 10px;
+}
+
+/* Improved nav panel for mobile */
+@media (max-width: 640px) {
+    .mobile-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-around;
+        padding: 0.5rem;
+        z-index: 40;
+    }
+
+    .mobile-nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem;
+        font-size: 0.75rem;
+        color: #64748b;
+        transition: color 0.2s;
+    }
+
+    .mobile-nav-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .mobile-nav-item.active {
+        color: #7c3aed;
+    }
+
+    #main-content {
+        padding-bottom: 5rem;
+    }
+}
+
+/* Stack cards in mobile view */
+@media (max-width: 768px) {
+    .modal-data-grid,
+    .data-list {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-table td {
+        padding: 0.5rem;
+    }
+
+    .recommendation-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .recommendation-priority {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* =============================================
+   ANIMATIONS AND MICRO-INTERACTIONS
+   ============================================= */
+
+/* Tab switching transitions */
+.tab-pane {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.tab-pane.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animated statistics */
+.stat-value {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-value::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+}
+
+/* Enhanced hover effects for interactive elements */
+.interactive-element {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.interactive-element:hover {
+    transform: translateY(-2px);
+}
+
+.interactive-element::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #7c3aed;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.interactive-element:hover::after {
+    transform: scaleX(1);
+}
+
+/* =============================================
+   PRINT STYLING ADDITIONS
+   ============================================= */
+
+@media print {
+    body {
+        background-color: white;
+        font-size: 12pt;
+    }
+
+    #sidebar, 
+    .no-print,
+    button, 
+    .btn,
+    .action-buttons,
+    footer {
+        display: none !important;
+    }
+
+    #main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .tab-pane {
+        display: block !important;
+        opacity: 1 !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .cluster-card,
+    .indicator-card,
+    .recommendation-card,
+    .table {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .print-header {
+        display: block;
+        text-align: center;
+        margin-bottom: 20pt;
+    }
+
+    .print-header h1 {
+        font-size: 18pt;
+        margin-bottom: 5pt;
+    }
+
+    .print-header p {
+        font-size: 10pt;
+        color: #64748b;
+    }
+
+    /* Ensure charts are visible */
+    canvas, 
+    .visualization-container {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+}
+
+/* =============================================
+   FIXES UNTUK KESELURUHAN HIERARKI UI
+   ============================================= */
+
+/* Hierarki navigasi yang lebih jelas */
+.hierarchy-navigation {
+    display: flex;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+}
+
+.hierarchy-navigation-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.hierarchy-navigation-item:hover {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.hierarchy-navigation-item.active {
+    background: #ede9fe;
+    color: #7c3aed;
+    font-weight: 500;
+}
+
+.hierarchy-navigation-item svg {
+    margin-right: 0.5rem;
+}
+
+.hierarchy-navigation-separator {
+    display: flex;
+    align-items: center;
+    color: #cbd5e1;
+    padding: 0 0.5rem;
+}
+
+/* Perbaikan untuk card view */
+.card-view-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Perbaikan untuk table view */
+.table-view {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+}
+
+/* Toggle view buttons */
+.view-toggle-container {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.view-toggle-btn {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.view-toggle-btn:first-child {
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+}
+
+.view-toggle-btn:last-child {
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+.view-toggle-btn.active {
+    background: #7c3aed;
+    color: white;
+    border-color: #7c3aed;
+}
+
+.view-toggle-btn svg {
+    margin-right: 0.5rem;
+}
+
+/* =============================================
+   PERBAIKAN KUALITAS PESAN KOSONG
+   ============================================= */
+
+.empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    background-color: #f9fafb;
+    border-radius: 0.75rem;
+    border: 1px dashed #e5e7eb;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.empty-state-icon {
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1.5rem;
+    color: #cbd5e1;
+}
+
+.empty-state-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-description {
+    font-size: 0.875rem;
+    color: #64748b;
+    max-width: 24rem;
+    margin: 0 auto 1.5rem;
+    line-height: 1.5;
+}
+
+.empty-state-action {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #7c3aed;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+}
+
+.empty-state-action:hover {
+    background-color: #6d28d9;
+    text-decoration: none;
+}
+
+.empty-state-action svg {
+    margin-right: 0.5rem;
+}
+
+.empty-state-secondary {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 1rem;
+}
+
+.empty-state-secondary a {
+    color: #7c3aed;
+    text-decoration: underline;
+}
+
+/* =============================================
+   PERBAIKAN NAVIGASI TABULASI 
+   ============================================= */
+
+/* Konsistensi tab styling di seluruh aplikasi */
+.tab-nav {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.tab-nav::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.tab-nav-item {
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.tab-nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.2s;
+}
+
+.tab-nav-item:hover {
+    color: #334155;
+}
+
+.tab-nav-item.active {
+    color: #7c3aed;
+    font-weight: 600;
+}
+
+.tab-nav-item.active::after {
+    background-color: #7c3aed;
+}
+
+/* =============================================
+   PENAMBAHAN INFORMASI KONTEKSTUAL
+   ============================================= */
+
+.context-info-box {
+    padding: 1rem;
+    background-color: #f0f9ff;
+    border-left: 4px solid #0284c7;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.context-info-box.warning {
+    background-color: #fffbeb;
+    border-left-color: #f59e0b;
+}
+
+.context-info-box.error {
+    background-color: #fef2f2;
+    border-left-color: #dc2626;
+}
+
+.context-info-box.success {
+    background-color: #f0fdf4;
+    border-left-color: #16a34a;
+}
+
+.context-info-box .title {
+    font-weight: 600;
+    color: #0c4a6e;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.context-info-box.warning .title {
+    color: #92400e;
+}
+
+.context-info-box.error .title {
+    color: #991b1b;
+}
+
+.context-info-box.success .title {
+    color: #166534;
+}
+
+.context-info-box .title svg {
+    margin-right: 0.5rem;
+}
+
+.context-info-box .content {
+    font-size: 0.875rem;
+    color: #0369a1;
+    line-height: 1.5;
+}
+
+.context-info-box.warning .content {
+    color: #b45309;
+}
+
+.context-info-box.error .content {
+    color: #b91c1c;
+}
+
+.context-info-box.success .content {
+    color: #15803d;
+}
+
+/* =============================================
+   VISIBILITAS MODAL YANG DITINGKATKAN
+   ============================================= */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 90%;
+    max-width: 42rem;
+    max-height: 85vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.modal-overlay.visible .modal-container {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.modal-close {
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #6b7280;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #1f2937;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* =============================================
+   HIGHLIGHT DATA CHANGES 
+   ============================================= */
+
+/* Digunakan untuk menampilkan peningkatan/penurunan data */
+.data-change {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.data-change.increase {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.data-change.decrease {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.data-change.neutral {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.data-change svg {
+    margin-right: 0.25rem;
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+/* =============================================
+   RESPONSIVE DESIGN FIXES
+   ============================================= */
+
+@media (max-width: 640px) {
+    .card-view-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hierarchy-navigation-item {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .hierarchy-navigation-item svg {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+
+    .tab-nav-item {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .modal-container {
+        width: 95%;
+        max-height: 80vh;
+    }
+}
+
+/* Perbaikan untuk layar yang sangat kecil */
+@media (max-width: 360px) {
+    .hierarchy-navigation {
+        padding: 0.5rem;
+    }
+    
+    .hierarchy-navigation-item {
+        padding: 0.25rem 0.375rem;
+        font-size: 0.75rem;
+    }
+    
+    .hierarchy-navigation-separator {
+        padding: 0 0.25rem;
+    }
+}

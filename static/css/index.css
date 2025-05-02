@@ -542,6 +542,7 @@
     color: #6B46C1;
 }
 
+/* UPDATED: FAQ answer dengan max-height dan scrollable */
 .faq-answer {
     max-height: 0;
     overflow: hidden;
@@ -550,10 +551,30 @@
 }
 
 .faq-item.active .faq-answer {
-    max-height: 800px;
+    max-height: 300px; /* Fixed height for scrollable behavior */
     padding-top: 0.75rem;
     padding-bottom: 1.5rem;
     opacity: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Add custom scrollbar for FAQ answers */
+.faq-item.active .faq-answer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.faq-item.active .faq-answer::-webkit-scrollbar-track {
+    background-color: rgba(139, 92, 246, 0.1);
+    border-radius: 10px;
+}
+
+.faq-item.active .faq-answer::-webkit-scrollbar-thumb {
+    background-color: rgba(139, 92, 246, 0.3);
+    border-radius: 10px;
+}
+
+.faq-item.active .faq-answer::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(139, 92, 246, 0.5);
 }
 
 .faq-answer p {
@@ -648,46 +669,7 @@
     }
 }
 
-/* FAQ Section Styles */
-/* Styling untuk FAQ Section */
-.faq-item {
-    border-left: 4px solid transparent;
-    transition: all 0.3s ease;
-}
-
-.faq-item:hover {
-    border-left-color: #8A70D6;
-}
-
-.faq-item.active {
-    border-left-color: #6B46C1;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.faq-item.active .faq-arrow {
-    transform: rotate(180deg);
-}
-
-.faq-item.active .faq-answer {
-    max-height: 500px;
-    padding-top: 0.5rem;
-    padding-bottom: 1.5rem;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0) rotate(-12deg);
-    }
-    50% {
-        transform: translateY(-15px) rotate(-8deg);
-    }
-}
-
-.floating-element {
-    animation: float 5s ease-in-out infinite;
-}
-
-/* Footer Styles */
+/* UPDATED: Footer Styles dengan animasi tambahan */
 /* Styling untuk footer dengan animasi yang ditingkatkan */
 .footer-top {
     animation: fadeInUp 0.8s ease-out;
@@ -710,6 +692,92 @@
 .footer-design {
     opacity: 0;
     animation: slideInRight 1s ease-out 0.8s forwards;
+}
+
+/* UPDATED: Animasi tambahan untuk footer */
+/* Floating bubbles for footer */
+.footer-bubble {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    background-color: white;
+    z-index: 1;
+    animation: footerBubbleFloat 15s infinite ease-in-out;
+}
+
+@keyframes footerBubbleFloat {
+    0%, 100% {
+        transform: translateY(0) translateX(0) scale(1);
+    }
+    25% {
+        transform: translateY(-20px) translateX(10px) scale(1.1);
+    }
+    50% {
+        transform: translateY(-30px) translateX(20px) scale(1);
+    }
+    75% {
+        transform: translateY(-10px) translateX(5px) scale(0.9);
+    }
+}
+
+/* Animated light rays for footer */
+.footer-light-ray {
+    position: absolute;
+    height: 2px;
+    width: 100px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    z-index: 1;
+    transform-origin: left center;
+    animation: footerLightRay 8s infinite ease-in-out;
+}
+
+@keyframes footerLightRay {
+    0%, 100% {
+        transform: rotate(25deg) translateX(-100%) scaleX(1);
+        opacity: 0;
+    }
+    10%, 90% {
+        opacity: 0.2;
+    }
+    50% {
+        transform: rotate(45deg) translateX(100%) scaleX(2);
+        opacity: 0.3;
+    }
+}
+
+/* Animasi waves untuk footer */
+.footer-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    z-index: 1;
+    animation: footerWave 12s infinite linear;
+}
+
+.footer-wave:nth-child(2) {
+    bottom: 10px;
+    opacity: 0.1;
+    animation: footerWave 10s infinite linear;
+    animation-delay: 2s;
+}
+
+.footer-wave:nth-child(3) {
+    bottom: 20px;
+    opacity: 0.07;
+    animation: footerWave 8s infinite linear;
+    animation-delay: 4s;
+}
+
+@keyframes footerWave {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 100vw 0;
+    }
 }
 
 /* Animasi untuk logo */
@@ -753,25 +821,33 @@
     animation: lightBeamMove 8s ease-in-out infinite;
 }
 
-/* Animasi partikel untuk footer */
-.particles-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 5;
-}
-
-.particle {
+/* UPDATED: Improved footer particles */
+.footer-particle {
     position: absolute;
     display: block;
+    pointer-events: none;
+    border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.3);
     width: 4px;
     height: 4px;
-    border-radius: 50%;
-    animation: float 15s infinite linear;
+    animation: footerParticleFloat 12s infinite linear;
+}
+
+@keyframes footerParticleFloat {
+    0% {
+        transform: translateY(100%) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.7;
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(var(--x-end, 50px));
+        opacity: 0;
+    }
 }
 
 /* Additional Keyframes */
@@ -854,5 +930,10 @@
 @media (max-width: 768px) {
     .profile-carousel-container {
         max-width: 320px;
+    }
+    
+    /* Adjust FAQ max height on mobile */
+    .faq-item.active .faq-answer {
+        max-height: 250px;
     }
 }
